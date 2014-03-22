@@ -43,6 +43,38 @@
   // Set up the globe's initial scale, offset, and rotation.
   globe.projection.scale(175).translate([175, 175]).rotate([0, -10, 0]);
 
+  var doVis = function(data) {
+    setInterval(function() {
+      var colors = ['red', 'yellow', 'white', 'orange', 'green', 'cyan', 'pink'];
+      var item = data[Math.floor(Math.random() * data.length)];
+      //console.log(item);
+      if(item.geo.coords) {
+        var lat = item.geo.coords[1];
+        var lng = item.geo.coords[0];
+        var color;
+
+        var tagNames = _(item.tags).pluck('name');
+        //console.log(tagNames);
+        if(_(tagNames).contains('physical-violence')) {
+          color = 'orange';
+        }
+        else if(_(tagNames).contains('arrest')) {
+          color = 'yellow';
+        }
+        else if(_(tagNames).contains('arrest')) {
+          color = 'green';
+        }
+        else {
+          color = 'cyan';
+        }
+
+        //var 
+        globe.plugins.pings.add(lng, lat, { color: color, ttl: 2000, angle: 30 });
+      }
+    }, 250);
+  };
+
+  // This is hideous. I am in a tremendous hurry.
   $.ajax({
     url: 'http://devapi.crisis.net/item?source=gdelt&limit=100',
     dataType: "json",
@@ -50,36 +82,21 @@
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
     },
     success: function (data) {
-      // Every few hundred milliseconds, we'll draw another random ping.
-      console.log(data.length);
-      var colors = ['red', 'yellow', 'white', 'orange', 'green', 'cyan', 'pink'];
-      setInterval(function() {
-        var item = data[Math.floor(Math.random() * data.length)];
-        //console.log(item);
-        if(item.geo.coords) {
-          var lat = item.geo.coords[1];
-          var lng = item.geo.coords[0];
-          var color;
+      var arr = data;
+      $.ajax({
+        url: 'http://devapi.crisis.net/item?source=gdelt&&offset=100limit=100',
+        dataType: "json",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+        },
+        success: function (data) {
+          _(data).each(function(item) {
+            arr.push(item);
+          });
 
-          var tagNames = _(item.tags).pluck('name');
-          //console.log(tagNames);
-          if(_(tagNames).contains('physical-violence')) {
-            color = 'orange';
-          }
-          else if(_(tagNames).contains('arrest')) {
-            color = 'yellow';
-          }
-          else if(_(tagNames).contains('arrest')) {
-            color = 'green';
-          }
-          else {
-            color = 'cyan';
-          }
-
-          //var 
-          globe.plugins.pings.add(lng, lat, { color: color, ttl: 2000, angle: 30 });
+          doVis(arr);
         }
-      }, 500);
+      });
     }
   });
 

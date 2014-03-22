@@ -12,12 +12,18 @@ title: CrisisNET
               <h1 class="text-right">CrisisNET</h1>
               <p class="lead text-right">The firehose of <strong>global crisis data</strong>.</p>
               <p class="text-right"><a class="btn btn-white" href="/about">Learn More &nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></a></p>
-              <img class="hero-static hidden-xs" src="images/hero.png">
+              <canvas class="hidden-xs" id='rotatingGlobe' width='400' height='400' 
+              style='width: 400px; height: 400px; position: absolute; margin-top: -320px; margin-left: -320px;cursor: move;'></canvas>
+              <!-- <img class="hero-static hidden-xs" src="images/hero.png"> -->
           </div>
           <div class="col-md-1"></div>
       </div>
   </div><!-- .header -->
 </div><!-- .header-wrap -->
+
+<div class="well well-sm tight-top">
+  <p>The visualization above is generated in real-time from the CrisisNET API. It shows global conflict incidents in the past 24 hours.</p>
+</div>
 
 <div class="row content">
   <div class="clearfix">

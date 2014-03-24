@@ -74,9 +74,76 @@
     }, 250);
   };
 
+  var doVis2 = function(arr) {
+    var diameter = 420,
+    format = d3.format(",d"),
+    color = d3.scale.category20c();
+
+    var bubble = d3.layout.pack()
+        .sort(null)
+        .size([diameter, diameter])
+        .padding(1.5);
+
+    var svg = d3.select("#bubbleGraph").append("svg")
+        .attr("width", diameter)
+        .attr("height", diameter)
+        .attr("class", "bubble");
+
+    var processData = function() {
+      var tagCounts = {}, 
+          tags = [];
+
+      _(arr).each(function(item) {
+        _(item.tags).each(function(tag) {
+          if(tag.name !== "conflict") {
+            if(_(tagCounts[tag.name]).isUndefined()) {
+              tagCounts[tag.name] = 1;
+            }
+            else {
+              tagCounts[tag.name]++;
+            }
+          }
+        });
+      });
+
+      var tags = _(_(tagCounts).keys()).map(function(key) {
+        return {
+          className: key,
+          package: "cluster", 
+          value: tagCounts[key]
+        }
+      });
+
+      return { children: tags };
+    };
+
+    var data = processData();
+    console.log(data);
+    var node = svg.selectAll(".node")
+      .data(bubble.nodes(data)
+      .filter(function(d) { return !d.children; }))
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+      node.append("title")
+          .text(function(d) { return d.className + ": " + format(d.value); });
+
+      node.append("circle")
+          .attr("r", function(d) { return d.r; })
+          .style("fill", function(d) { return color(d.className); });
+
+      node.append("text")
+          .attr("dy", ".3em")
+          .style("text-anchor", "middle")
+          .style("font-size", "10px")
+          .style("text-transform", "capitalize")
+          .text(function(d) { return d.className.replace("-"," ").substring(0, d.r / 3); });      
+  };
+
   // This is hideous. I am in a tremendous hurry.
   $.ajax({
-    url: 'http://devapi.crisis.net/item?source=gdelt&limit=100',
+    url: 'http://devapi.crisis.net/item?limit=100',
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -95,6 +162,7 @@
           });
 
           doVis(arr);
+          doVis2(arr);
         }
       });
     }

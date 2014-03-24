@@ -10,10 +10,10 @@ title: CrisisNET
       <div class="jumbotron clearfix">
           <div class="col-md-11">
               <h1 class="text-right">CrisisNET</h1>
-              <p class="lead text-right">The firehose of <strong>global crisis data</strong>.</p>
+              <p class="lead text-right">The firehose of <strong>global crisis data</strong>.
+                <br><small><em>* Currently in pre-alpha</em></small></p>
               <p class="text-right"><a class="btn btn-white" href="/about">Learn More &nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></a></p>
-              <canvas class="hidden-xs" id='rotatingGlobe' width='400' height='400' 
-              style='width: 400px; height: 400px; position: absolute; margin-top: -320px; margin-left: -320px;cursor: move;'></canvas>
+              <canvas class="hidden-xs" id='rotatingGlobe' width='750' height='750'></canvas>
               <!-- <img class="hero-static hidden-xs" src="images/hero.png"> -->
           </div>
           <div class="col-md-1"></div>
@@ -22,12 +22,12 @@ title: CrisisNET
 </div><!-- .header-wrap -->
 
 <div class="well well-sm tight-top">
-  <p>The visualization above is generated in real-time from the CrisisNET API. It shows global conflict incidents in the past 24 hours.</p>
+  <p>The visualization above is generated in real-time from the CrisisNET API. It shows documented incidents of agression and/or violence from the past 24 hours.</p>
 </div>
 
 <div class="row content">
   <div class="clearfix">
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-6">
         <h2>Crisis data, at your fingertips</h2>
         <p>CrisisNET finds, formats and exposes crisis data in a simple, intuitive structure that’s accessible anywhere. Now developers, journalists and analysts can skip the days of tedious data processing and get to work in minutes with only a few lines of code.</p>
         <p><blockquote>Focus on what you care about: visualizations, analysis & building the next amazing crisis app.</blockquote></p>
@@ -35,31 +35,31 @@ title: CrisisNET
     </div>
 
     <div class="col-md-5">
-        <img class="flush-right hidden-xs hidden-sm" src="images/code.png">
+        <!-- <img class="flush-right hidden-xs hidden-sm" src="images/code.png"> -->
+        <div id="bubbleGraph"></div>
     </div>
   </div>
+</div>
 
-  <div class="row well well-lg text-center">
-    <!--
-    <ul class="list-inline">
-        <li><img src="/images/github.png"></li>
-        <li><img src="/images/github.png"></li>
-        <li><img src="/images/github.png"></li>
-        <li><img src="/images/github.png"></li>
-    </ul>
-    -->
-  </div>
-  
+<div class="row well well-lg text-center">
+  <!--
+  <ul class="list-inline">
+      <li><img src="/images/github.png"></li>
+      <li><img src="/images/github.png"></li>
+      <li><img src="/images/github.png"></li>
+      <li><img src="/images/github.png"></li>
+  </ul>
+  -->
 </div>
 
 <div class="row content">
-  <div class="col-md-5 col-md-offset-1">
-      <h2>An Intuitive, Powerful API</h2>
+  <div class="col-md-5">
+      <h2>An intuitive, powerful API</h2>
       <p><strong><em>Our API is designed for blazing speed and maximum flexibility.</em></strong></p>
       <p>We give you the power to search, refine and filter massive amounts of information into a single stream of curated crisis data. Using a straightforward REST interface, you can retrieve exactly what you need using your favorite programming language with only a few lines of code.</p>
       <p><a class="btn btn-orange" href="http://devapi.crisis.net">Get Started <span class="glyphicon glyphicon-ok"></span></a></p>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6 col-md-offset-1">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Example API Request</h3>

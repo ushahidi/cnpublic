@@ -27,7 +27,14 @@ blockquote {
 }
 
 .row {
-    margin-top: 60px;
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+h1 {
+    font-family: 'Ubuntu', "Myriad Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
 }
 
 h2 {
@@ -68,7 +75,7 @@ h2 {
 
 .flush-right {
     position: relative;
-    right: -148px;
+    right: -121px;
     bottom: -61px;
 }
 
@@ -111,8 +118,8 @@ h2 {
     background-image: url('/images/logo.png');
     background-repeat: no-repeat;
     text-indent: -999px;
-    width: 93px;
-    height: 93px;
+    width: 97px;
+    height: 97px;
 }
 
 .navbar-default, .jumbotron {
@@ -139,6 +146,13 @@ h2 {
     font-size: 16px;
 }
 
+.row.text-content {
+   margin-top: 20px;
+   h3 {
+    margin-top: 0px;
+   } 
+}
+
 .content h2 {
     margin-bottom: 25px;
 }
@@ -149,7 +163,7 @@ h2 {
 }
 
 .call-out {
-    background: #13c1ac;
+    background: #f05526;
     color: #fff;
     padding: 80px 0;
 
@@ -189,6 +203,18 @@ pre.prettyprint {
 .jumbotron {
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
+    padding-top: 0px;
+    margin-top: -85px;
+    overflow:hidden;
+}
+
+#rotatingGlobe {
+    width: 750px;
+    height: 750px;
+    position: absolute;
+    margin-top: -204px;
+    margin-left: -468px;
+    cursor: move;
 }
 
 /* Responsive: Portrait tablets and up */

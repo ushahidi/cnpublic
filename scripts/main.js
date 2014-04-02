@@ -143,7 +143,7 @@
 
   // This is hideous. I am in a tremendous hurry.
   $.ajax({
-    url: 'http://devapi.crisis.net/item?limit=100',
+    url: 'http://192.237.180.234:8083/item?limit=100',
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

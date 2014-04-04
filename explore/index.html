@@ -40,7 +40,8 @@ title: About CrisisNET
       <input id="query-params" type="text" class="form-control" placeholder="Query params">
     </div>
 
-    <pre style="overflow-y:auto;height:500px;margin-top:10px;" id="api-response"></pre>
+    <pre style="overflow-y:auto;height:300px;margin-top:10px;" id="api-response"></pre>
+    <div id="map-canvas" style="height:400px;margin-top:20px;"></div>
   </div>
 
   <div class="col-md-3">
@@ -107,8 +108,58 @@ title: About CrisisNET
   </div>
 </div>
 
+<script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="/scripts/markercluster.js"></script>
 <script>
 window.doOnLoad = function() {
+  var mapOptions = {
+      center: new google.maps.LatLng(34.30714385628804, -41.484375),
+      zoom: 2,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI:true,
+      streetViewControl: false,
+      draggable: true,
+      navigationControl: true,
+      scalControl: false,
+      panControl: false,
+      zoomControl: true,
+      scaleControl: true,
+      scrollwheel: false
+    };
+
+  var streetMap = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+  var markerCluster = new MarkerClusterer(streetMap, []);
+
+  var clearMarkers = function() {
+    _(markers).each(function(marker) {
+      marker.setMap(null);
+    })
+  };
+
+  var updateMap = function(data) {
+    markerCluster.clearMarkers();
+
+    $.each(data, function(idx, val) {
+      var coords = val.geo.coords;
+      var latLng = new google.maps.LatLng(coords[1], coords[0]);
+      var marker = new google.maps.Marker({
+          position: latLng,
+          map: streetMap,
+          title: val.summary
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+          content: val.content
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(streetMap,marker);
+      });
+
+      markerCluster.addMarker(marker);
+    }); 
+  };
+
   var pingAPI = function(url) {
     console.log("Requesting: " + url);
     $.ajax({
@@ -119,6 +170,7 @@ window.doOnLoad = function() {
       },
       success: function (data) {
         $('#api-response').html(JSON.stringify(data, undefined, 2));
+        updateMap(data);
       }
     });
   };
@@ -191,15 +243,23 @@ window.doOnLoad = function() {
     $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+text+'&sensor=false', function(data) {
         if(data.status === "OK") {
           var coords = data.results[0].geometry.location;
-          queryParams.location = coords.lng + "," + coords.lat;
-
-          var paramString = makeParams();
-          pingAPI(baseAPIURL+paramString);
+          updateLocation(coords);
         }
         else {
           alert("We could not geocode that address");
         }
     });
+  };
+
+  var updateLocation = function(coords) {
+    queryParams.location = coords.lng + "," + coords.lat;
+
+    var paramString = makeParams();
+    pingAPI(baseAPIURL+paramString);
+
+    streetMap.setZoom(8);
+    var latLng = new google.maps.LatLng(coords.lat, coords.lng);
+    streetMap.setCenter(latLng);
   };
   
   var suggestFromGoogle = function() {
@@ -211,6 +271,13 @@ window.doOnLoad = function() {
       });
     });
   };
+
+  google.maps.event.addListener(streetMap, "click", function (e) {
+    //lat and lng is available in e object
+    var latLng = e.latLng;
+    console.log(latLng);
+    updateLocation({lng:latLng.A, lat:latLng.k});
+  });
 
 
   // binding

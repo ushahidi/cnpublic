@@ -1,47 +1,63 @@
-(function() {
-  var globe = planetaryjs.planet();
-  // Load our custom `autorotate` plugin; see below.
-  globe.loadPlugin(autorotate(10));
-  // The `earth` plugin draws the oceans and the land; it's actually
-  // a combination of several separate built-in plugins.
-  //
-  // Note that we're loading a special TopoJSON file
-  // (world-110m-withlakes.json) so we can render lakes.
-  
-  globe.loadPlugin(planetaryjs.plugins.earth({
-    topojson: { file:   '/scripts/world-110m-withlakes.json' },
-    oceans:   { fill:   '#222222' },
-    land:     { fill:   '#666666' },
-    borders:  { stroke: '#333333' }
-  }));
-  // Load our custom `lakes` plugin to draw lakes; see below.
-  globe.loadPlugin(lakes({
-    fill: '#222222'
-  }));
-  /*
-  globe.loadPlugin(planetaryjs.plugins.earth({
-    topojson: { file: '/scripts/world-110m.json' }
-  }));
-  */
-  // The `pings` plugin draws animated pings on the globe.
-  globe.loadPlugin(planetaryjs.plugins.pings());
-  // The `zoom` and `drag` plugins enable
-  // manipulating the globe with the mouse.
-  //globe.loadPlugin(planetaryjs.plugins.zoom({
-  //  scaleExtent: [100, 300]
-  //}));
-  globe.loadPlugin(planetaryjs.plugins.drag({
-    // Dragging the globe should pause the
-    // automatic rotation until we release the mouse.
-    onDragStart: function() {
-      this.plugins.autorotate.pause();
-    },
-    onDragEnd: function() {
-      this.plugins.autorotate.resume();
+var CN = (function() {
+  var globe;
+
+  var initMainVis = function() {
+    globe = planetaryjs.planet();
+    // Load our custom `autorotate` plugin; see below.
+    globe.loadPlugin(autorotate(10));
+    // The `earth` plugin draws the oceans and the land; it's actually
+    // a combination of several separate built-in plugins.
+    //
+    // Note that we're loading a special TopoJSON file
+    // (world-110m-withlakes.json) so we can render lakes.
+    
+    globe.loadPlugin(planetaryjs.plugins.earth({
+      topojson: { file:   '/scripts/world-110m-withlakes.json' },
+      oceans:   { fill:   '#222222' },
+      land:     { fill:   '#666666' },
+      borders:  { stroke: '#333333' }
+    }));
+    // Load our custom `lakes` plugin to draw lakes; see below.
+    globe.loadPlugin(lakes({
+      fill: '#222222'
+    }));
+    /*
+    globe.loadPlugin(planetaryjs.plugins.earth({
+      topojson: { file: '/scripts/world-110m.json' }
+    }));
+    */
+    // The `pings` plugin draws animated pings on the globe.
+    globe.loadPlugin(planetaryjs.plugins.pings());
+    // The `zoom` and `drag` plugins enable
+    // manipulating the globe with the mouse.
+    //globe.loadPlugin(planetaryjs.plugins.zoom({
+    //  scaleExtent: [100, 300]
+    //}));
+    globe.loadPlugin(planetaryjs.plugins.drag({
+      // Dragging the globe should pause the
+      // automatic rotation until we release the mouse.
+      onDragStart: function() {
+        this.plugins.autorotate.pause();
+      },
+      onDragEnd: function() {
+        this.plugins.autorotate.resume();
+      }
+    }));
+    // Set up the globe's initial scale, offset, and rotation.
+    globe.projection.scale(175).translate([175, 175]).rotate([0, -10, 0]);
+
+    var canvas = document.getElementById('rotatingGlobe');
+    // Special code to handle high-density displays (e.g. retina, some phones)
+    // In the future, Planetary.js will handle this by itself (or via a plugin).
+    if (window.devicePixelRatio == 2) {
+      canvas.width = 800;
+      canvas.height = 800;
+      context = canvas.getContext('2d');
+      context.scale(2, 2);
     }
-  }));
-  // Set up the globe's initial scale, offset, and rotation.
-  globe.projection.scale(175).translate([175, 175]).rotate([0, -10, 0]);
+    // Draw that globe!
+    globe.draw(canvas);
+  };
 
   var doVis = function(data) {
     setInterval(function() {
@@ -118,7 +134,6 @@
     };
 
     var data = processData();
-    console.log(data);
     var node = svg.selectAll(".node")
       .data(bubble.nodes(data)
       .filter(function(d) { return !d.children; }))
@@ -140,45 +155,6 @@
           .style("text-transform", "capitalize")
           .text(function(d) { return d.className.replace("-"," ").substring(0, d.r / 3); });      
   };
-
-  // This is hideous. I am in a tremendous hurry.
-  $.ajax({
-    url: 'http://192.237.180.234:8083/item?limit=100',
-    dataType: "json",
-    beforeSend: function(xhr) {
-      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
-    },
-    success: function (data) {
-      var arr = data;
-      $.ajax({
-        url: 'http://devapi.crisis.net/item?source=gdelt&&offset=100limit=100',
-        dataType: "json",
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
-        },
-        success: function (data) {
-          _(data).each(function(item) {
-            arr.push(item);
-          });
-
-          doVis(arr);
-          doVis2(arr);
-        }
-      });
-    }
-  });
-
-  var canvas = document.getElementById('rotatingGlobe');
-  // Special code to handle high-density displays (e.g. retina, some phones)
-  // In the future, Planetary.js will handle this by itself (or via a plugin).
-  if (window.devicePixelRatio == 2) {
-    canvas.width = 800;
-    canvas.height = 800;
-    context = canvas.getContext('2d');
-    context.scale(2, 2);
-  }
-  // Draw that globe!
-  globe.draw(canvas);
 
   // This plugin will automatically rotate the globe around its vertical
   // axis a configured number of degrees every second.
@@ -236,4 +212,15 @@
       });
     };
   };
-})();
+
+  return {
+    doVis: doVis,
+    doVis2: doVis2,
+    initMainVis: initMainVis
+  }
+})(CN || {});
+
+// this is kind of dumb - just working around jekyll's template limitations
+if(window.doOnLoad) {
+  window.doOnLoad();
+}

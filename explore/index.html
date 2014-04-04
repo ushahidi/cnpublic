@@ -1,0 +1,144 @@
+---
+layout: default
+title: About CrisisNET
+---
+<div class="header-wrap header-wrap-short"><div class="header">
+{% include nav.html %}
+</div></div>
+
+<div class="row content text-content">
+  <div class="col-md-9">
+    <h2>Explore the API</h2>
+    <p>The CrisisNET platform is capable of housing any incident data and making it accessible in a simple, standard format for your project. Use the filters on the right to navigate our sample data.</p>
+  </div>
+</div>
+
+<div class="row content text-content">
+  <div class="col-md-9">
+    <div class="input-group">
+      <span class="input-group-addon">http://devapi.crisis.net/item</span>
+      <input id="query-params" type="text" class="form-control" placeholder="Query params">
+    </div>
+
+    <pre style="overflow-y:auto;height:500px;margin-top:10px;" id="api-response"></pre>
+  </div>
+
+  <div class="col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Filter Results</h3>
+      </div>
+      <div class="panel-body">
+        <form role="form">
+          <strong>Tags</strong>
+          <div class="checkbox">
+            <label>
+              <input data-type="tags" value="physical-violence" type="checkbox"> physical-violence
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="tags" value="armed-conflict" type="checkbox"> armed-conflict
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="tags" value="flood" type="checkbox"> flood
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="tags" value="tropical-cyclone" type="checkbox"> tropical-cyclone
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="tags" value="earthquake" type="checkbox"> earthquake
+            </label>
+          </div>
+
+          <hr>
+
+          <strong>Sources</strong>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="ushahidi" type="checkbox"> Ushahidi
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="gdelt" type="checkbox"> GDELT
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="reliefweb" type="checkbox"> ReliefWeb
+            </label>
+          </div>
+        </form> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+window.doOnLoad = function() {
+  var pingAPI = function(url) {
+    console.log("Requesting: " + url);
+    $.ajax({
+      url: url,
+      dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+      },
+      success: function (data) {
+        $('#api-response').html(JSON.stringify(data, undefined, 2));
+      }
+    });
+  };
+
+  var baseAPIURL = 'http://devapi.crisis.net/item';
+
+  pingAPI(baseAPIURL);
+
+  var queryParams = {};
+  var addQueryParam = function(param, value) {
+    queryParams[param] = value;
+  };
+
+  var removeQueryParam = function(param, value) {
+    var vals = queryParams[param].split(',');
+    vals = _(vals).without(value);
+
+    if(_(vals).isEmpty()) {
+      delete queryParams[param];
+    }
+    else {
+      queryParams[param] = vals.join(',');
+    }
+  };
+
+  var handleCheckboxClick = function(e) {
+    var $this = $(e.target);
+
+    if($this.is(':checked')) {
+      addQueryParam($this.data('type'), $this.val());
+    }
+    else {
+      removeQueryParam($this.data('type'), $this.val());
+    }
+
+    var params = $.param(queryParams);
+    var paramString = '';
+
+    if(params.length > 0) {
+      paramString = '?' + params;
+    }
+
+    $('#query-params').val(paramString);
+    pingAPI(baseAPIURL+paramString);
+  };
+
+  $('input[type=checkbox]').click(handleCheckboxClick);
+};
+</script>

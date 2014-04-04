@@ -2,6 +2,26 @@
 layout: default
 title: About CrisisNET
 ---
+<style>
+#suggest-list {
+  margin-top: 5px;
+  background: #eee;
+  list-style: none;
+  padding-left: 0px;
+}
+
+#suggest-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#suggest-list li:hover {
+  background: #fff;
+  cursor: pointer;
+}
+</style>
+
 <div class="header-wrap header-wrap-short"><div class="header">
 {% include nav.html %}
 </div></div>
@@ -30,6 +50,12 @@ title: About CrisisNET
       </div>
       <div class="panel-body">
         <form role="form">
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" placeholder="Enter location">
+            <ul id="suggest-list"></ul>
+          </div>
+
           <strong>Tags</strong>
           <div class="checkbox">
             <label>
@@ -103,7 +129,16 @@ window.doOnLoad = function() {
 
   var queryParams = {};
   var addQueryParam = function(param, value) {
-    queryParams[param] = value;
+    if(queryParams[param]) {
+      var vals = queryParams[param].split(',');
+      if(!_(vals).contains(value)) {
+        vals.push(value);
+      }
+      queryParams[param] = vals.join(',');
+    }
+    else {
+      queryParams[param] = value;
+    }
   };
 
   var removeQueryParam = function(param, value) {
@@ -118,6 +153,20 @@ window.doOnLoad = function() {
     }
   };
 
+  var makeParams = function() {
+    var params = $.param(queryParams);
+    var paramString = '';
+
+    if(params.length > 0) {
+      paramString = '?' + params;
+    }
+
+    $('#query-params').val(paramString);
+
+    return paramString;
+  };
+
+  // Checkboxes
   var handleCheckboxClick = function(e) {
     var $this = $(e.target);
 
@@ -128,17 +177,45 @@ window.doOnLoad = function() {
       removeQueryParam($this.data('type'), $this.val());
     }
 
-    var params = $.param(queryParams);
-    var paramString = '';
-
-    if(params.length > 0) {
-      paramString = '?' + params;
-    }
-
-    $('#query-params').val(paramString);
+    var paramString = makeParams();
     pingAPI(baseAPIURL+paramString);
   };
 
+
+  // Location
+  var chooseSuggestValue = function(e) {
+    var text = $(e.target).text();
+    $('#location').val(text);
+    $('#suggest-list').find('li').remove();
+
+    $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+text+'&sensor=false', function(data) {
+        if(data.status === "OK") {
+          var coords = data.results[0].geometry.location;
+          queryParams.location = coords.lng + "," + coords.lat;
+
+          var paramString = makeParams();
+          pingAPI(baseAPIURL+paramString);
+        }
+        else {
+          alert("We could not geocode that address");
+        }
+    });
+  };
+  
+  var suggestFromGoogle = function() {
+    $.getJSON('http://www.google.com/maps/suggest?callback=?&q='+$(this).val(),function(data) {
+      var $container = $('#suggest-list');
+      $container.find('li').remove();
+      $.each(data.suggestion,function() {
+        $container.append('<li>'+this.query+'</li>');
+      });
+    });
+  };
+
+
+  // binding
   $('input[type=checkbox]').click(handleCheckboxClick);
+  $('#location').keyup(suggestFromGoogle);
+  $('#suggest-list').on("click", "li", chooseSuggestValue);
 };
 </script>

@@ -170,7 +170,7 @@ window.doOnLoad = function() {
       },
       success: function (data) {
         $('#api-response').html(JSON.stringify(data, undefined, 2));
-        updateMap(data);
+        updateMap(data.data);
       }
     });
   };

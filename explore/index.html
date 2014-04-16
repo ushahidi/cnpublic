@@ -50,14 +50,21 @@ title: About CrisisNET
         <h3 class="panel-title">Filter Results</h3>
       </div>
       <div class="panel-body">
-        <form role="form">
+        <form id="check-filters" role="form">
           <div class="form-group">
             <label for="location">Location</label>
             <input type="text" class="form-control" id="location" placeholder="Enter location">
             <ul id="suggest-list"></ul>
           </div>
 
-          <strong>Tags</strong>
+          <h3>Tags</h3>
+          <h4>Conflict</h4>
+          <div id="conflict-tags"></div>
+          <hr>
+          <h4>Disaster</h4>
+          <div id="disaster-tags"></div>
+
+          <!--
           <div class="checkbox">
             <label>
               <input data-type="tags" value="physical-violence" type="checkbox"> physical-violence
@@ -83,10 +90,11 @@ title: About CrisisNET
               <input data-type="tags" value="earthquake" type="checkbox"> earthquake
             </label>
           </div>
+          -->
 
           <hr>
 
-          <strong>Sources</strong>
+          <h3>Sources</h3>
           <div class="checkbox">
             <label>
               <input data-type="sources" value="ushahidi" type="checkbox"> Ushahidi
@@ -112,6 +120,34 @@ title: About CrisisNET
 <script src="/scripts/markercluster.js"></script>
 <script>
 window.doOnLoad = function() {
+  var checkboxes = '<% _.each(tags, function(tag) { %> \
+    <div class="checkbox"><label>\
+    <input data-type="tags" value="<%= tag.name %>" type="checkbox"> \
+    <%= tag.name %></label></div><% }); %>';
+
+  var setTags = function() {
+    $.ajax({
+      url: 'http://devapi.crisis.net/system-tag',
+      dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+      },
+      success: function (data) {
+        var disasterTags = _(data.data).filter(
+          function(tag) { return _(tag.categories).contains('disaster')});
+
+        var conflictTags = _(data.data).filter(
+          function(tag) { return _(tag.categories).contains('conflict')});
+
+        $('#disaster-tags').html(_.template(checkboxes, {tags: disasterTags}));
+        $('#conflict-tags').html(_.template(checkboxes, {tags: conflictTags}));
+      }
+    });
+
+  };
+
+  setTags();
+
   var mapOptions = {
       center: new google.maps.LatLng(34.30714385628804, -41.484375),
       zoom: 2,
@@ -141,22 +177,26 @@ window.doOnLoad = function() {
 
     $.each(data, function(idx, val) {
       var coords = val.geo.coords;
-      var latLng = new google.maps.LatLng(coords[1], coords[0]);
-      var marker = new google.maps.Marker({
-          position: latLng,
-          map: streetMap,
-          title: val.summary
-      });
 
-      var infowindow = new google.maps.InfoWindow({
-          content: val.content
-      });
+      if(coords) {
 
-      google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(streetMap,marker);
-      });
+        var latLng = new google.maps.LatLng(coords[1], coords[0]);
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: streetMap,
+            title: val.summary
+        });
 
-      markerCluster.addMarker(marker);
+        var infowindow = new google.maps.InfoWindow({
+            content: val.summary
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(streetMap,marker);
+        });
+
+        markerCluster.addMarker(marker);
+      }
     }); 
   };
 
@@ -281,7 +321,7 @@ window.doOnLoad = function() {
 
 
   // binding
-  $('input[type=checkbox]').click(handleCheckboxClick);
+  $('#check-filters').on('click', 'input[type=checkbox]', handleCheckboxClick);
   $('#location').keyup(suggestFromGoogle);
   $('#suggest-list').on("click", "li", chooseSuggestValue);
 };

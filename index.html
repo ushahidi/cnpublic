@@ -107,30 +107,61 @@ $.getJSON(url + '?location=' + location, function(data) {
 window.doOnLoad = function() {
   CN.initMainVis();
 
-  $.ajax({
-    url: 'http://devapi.crisis.net/item?limit=100',
-    dataType: "json",
-    beforeSend: function(xhr) {
-      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
-    },
-    success: function (data) {
-      var arr = data.data;
-      $.ajax({
-        url: 'http://devapi.crisis.net/item?offset=100limit=100',
-        dataType: "json",
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
-        },
-        success: function (data) {
-          _(data.data).each(function(item) {
-            arr.push(item);
-          });
+  var getTags = function(cb) {
+    $.ajax({
+      url: 'http://devapi.crisis.net/system-tag',
+      dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+      },
+      success: cb
+    });
 
-          CN.doVis(arr);
-          CN.doVis2(arr);
-        }
-      });
+  };
+
+  getTags(function(systemTags) {
+    var tagNames = _(systemTags.data).pluck('name');
+    var randomNumbers = [];
+    var num;
+
+    while(randomNumbers.length < 5) {
+      num = Math.floor(Math.random()*tagNames.length - 1);
+      if(!_(randomNumbers).contains(num)) {
+        randomNumbers.push(num);
+      }
     }
+
+    var randomTags = _(randomNumbers).map(function(num) {
+      return tagNames[num];
+    });
+
+    var randomTagString = randomTags.join(",");
+
+    $.ajax({
+      url: 'http://devapi.crisis.net/item?limit=100&tags='+randomTagString,
+      dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+      },
+      success: function (data) {
+        var arr = data.data;
+        $.ajax({
+          url: 'http://devapi.crisis.net/item?offset=100limit=100&tags='+randomTagString,
+          dataType: "json",
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+          },
+          success: function (data) {
+            _(data.data).each(function(item) {
+              arr.push(item);
+            });
+
+            CN.doVis(arr,tagNames);
+            CN.doVis2(arr,tagNames);
+          }
+        });
+      }
+    });
   });
 };
 

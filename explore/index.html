@@ -20,6 +20,16 @@ title: About CrisisNET
   background: #fff;
   cursor: pointer;
 }
+
+.text-control {
+  float: right;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+#remove-location:hover {
+  text-decoration: none;
+}
 </style>
 
 <div class="header-wrap header-wrap-short"><div class="header">
@@ -53,16 +63,21 @@ title: About CrisisNET
         <form id="check-filters" role="form">
           <div class="form-group">
             <label for="location">Location</label>
+            <a class="text-control" style="display:none;" href="#" id="remove-location"><span class="glyphicon glyphicon-remove-circle"></span> Clear location</a>
             <input type="text" class="form-control" id="location" placeholder="Enter location">
             <ul id="suggest-list"></ul>
           </div>
 
-          <h3>Tags</h3>
-          <h4>Conflict</h4>
-          <div id="conflict-tags"></div>
           <hr>
-          <h4>Disaster</h4>
-          <div id="disaster-tags"></div>
+
+          <strong>Tags</strong> <a class="text-control" href="#" id="toggle-tags">Show</a>
+          <div id="all-tags" style="display:none;overflow:hidden;">
+            <h4>Conflict</h4>
+            <div id="conflict-tags"></div>
+            <hr>
+            <h4>Disaster</h4>
+            <div id="disaster-tags"></div>
+          </div>
 
           <!--
           <div class="checkbox">
@@ -94,7 +109,7 @@ title: About CrisisNET
 
           <hr>
 
-          <h3>Sources</h3>
+          <strong>Sources</strong>
           <div class="checkbox">
             <label>
               <input data-type="sources" value="ushahidi" type="checkbox"> Ushahidi
@@ -147,9 +162,9 @@ window.doOnLoad = function() {
   };
 
   setTags();
-
+  var mapCenter = new google.maps.LatLng(36.5978891330702, 13.0078125);
   var mapOptions = {
-      center: new google.maps.LatLng(34.30714385628804, -41.484375),
+      center: mapCenter,
       zoom: 2,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       disableDefaultUI:true,
@@ -278,6 +293,7 @@ window.doOnLoad = function() {
   var chooseSuggestValue = function(e) {
     var text = $(e.target).text();
     $('#location').val(text);
+    $('#remove-location').show();
     $('#suggest-list').find('li').remove();
 
     $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address='+text+'&sensor=false', function(data) {
@@ -293,11 +309,15 @@ window.doOnLoad = function() {
 
   var updateLocation = function(coords) {
     queryParams.location = coords.lng + "," + coords.lat;
+    queryParams.maxDistance = 200;
 
     var paramString = makeParams();
     pingAPI(baseAPIURL+paramString);
 
-    streetMap.setZoom(8);
+    var curZoom = streetMap.getZoom();
+    if(curZoom <= 10) {
+      streetMap.setZoom(curZoom + 2);
+    }
     var latLng = new google.maps.LatLng(coords.lat, coords.lng);
     streetMap.setCenter(latLng);
   };
@@ -315,14 +335,42 @@ window.doOnLoad = function() {
   google.maps.event.addListener(streetMap, "click", function (e) {
     //lat and lng is available in e object
     var latLng = e.latLng;
-    console.log(latLng);
     updateLocation({lng:latLng.A, lat:latLng.k});
+    $('#remove-location').show();
   });
+
+  var clearLocation = function(e) {
+    e.preventDefault();
+    //$(e.target).preventDefault();
+
+    $('#location').val('');
+    delete queryParams.location;
+    delete queryParams.maxDistance;
+    var paramString = makeParams();
+    pingAPI(baseAPIURL+paramString);
+    streetMap.setCenter(mapCenter);
+    streetMap.setZoom(2);
+
+    $(e.target).hide();
+  };
 
 
   // binding
   $('#check-filters').on('click', 'input[type=checkbox]', handleCheckboxClick);
   $('#location').keyup(suggestFromGoogle);
   $('#suggest-list').on("click", "li", chooseSuggestValue);
+  $('#remove-location').on('click', clearLocation);
+  $('#toggle-tags').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    if($this.text() === 'Show') {
+      $('#all-tags').slideDown();
+      $(this).text('Hide');
+    }
+    else {
+      $('#all-tags').slideUp();
+      $(this).text('Show');
+    }
+  });
 };
 </script>

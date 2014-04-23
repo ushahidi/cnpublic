@@ -138,7 +138,7 @@ window.doOnLoad = function() {
     var randomTagString = randomTags.join(",");
 
     $.ajax({
-      url: 'http://devapi.crisis.net/item?limit=100&tags='+randomTagString,
+      url: 'http://devapi.crisis.net/item?limit=100',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -146,7 +146,7 @@ window.doOnLoad = function() {
       success: function (data) {
         var arr = data.data;
         $.ajax({
-          url: 'http://devapi.crisis.net/item?offset=100limit=100&tags='+randomTagString,
+          url: 'http://devapi.crisis.net/item?offset=100limit=100',
           dataType: "json",
           beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -156,8 +156,8 @@ window.doOnLoad = function() {
               arr.push(item);
             });
 
-            CN.doVis(arr,tagNames);
-            CN.doVis2(arr,tagNames);
+            CN.doVis(arr);
+            CN.doVis2(arr);
           }
         });
       }

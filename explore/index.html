@@ -142,7 +142,7 @@ window.doOnLoad = function() {
 
   var setTags = function() {
     $.ajax({
-      url: 'http://devapi.crisis.net/system-tag',
+      url: 'http://devapi.crisis.net/system-tag?categories=conflict,disaster',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

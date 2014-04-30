@@ -70,6 +70,13 @@ title: About CrisisNET
 
           <hr>
 
+          <div class="form-group">
+            <label for="text">Text Search</label>
+            <input type="text" class="form-control" id="text" placeholder="Enter text">
+          </div>
+
+          <hr>
+
           <strong>Tags</strong> <a class="text-control" href="#" id="toggle-tags">Show</a>
           <div id="all-tags" style="display:none;overflow:hidden;">
             <h4>Conflict</h4>
@@ -309,7 +316,7 @@ window.doOnLoad = function() {
 
   var updateLocation = function(coords) {
     queryParams.location = coords.lng + "," + coords.lat;
-    queryParams.maxDistance = 200;
+    queryParams.distance = 200;
 
     var paramString = makeParams();
     pingAPI(baseAPIURL+paramString);
@@ -354,6 +361,22 @@ window.doOnLoad = function() {
     $(e.target).hide();
   };
 
+  var textSearch = function(e) {
+    var text = $.trim($('#text').val());
+    var doPing = function() {
+      var paramString = makeParams();
+      pingAPI(baseAPIURL+paramString);
+    };
+    if(text.length > 2) {
+      queryParams.text = text;
+      doPing();
+    }
+    else if(text.length===0) {
+      delete queryParams.text;
+      doPing();
+    }
+  };
+
 
   // binding
   $('#check-filters').on('click', 'input[type=checkbox]', handleCheckboxClick);
@@ -372,5 +395,6 @@ window.doOnLoad = function() {
       $(this).text('Show');
     }
   });
+  $('#text').keyup(textSearch);
 };
 </script>

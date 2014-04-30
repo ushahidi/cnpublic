@@ -50,6 +50,11 @@ title: About CrisisNET
       <input id="query-params" type="text" class="form-control" placeholder="Query params">
     </div>
 
+    <ul class="pager">
+      <li class="previous disabled"><a id="prev" href="#">&larr; Prev</a></li>
+      <li class="next"><a id="next" href="#">Next &rarr;</a></li>
+    </ul>
+
     <pre style="overflow-y:auto;height:300px;margin-top:10px;" id="api-response"></pre>
     <div id="map-canvas" style="height:400px;margin-top:20px;"></div>
   </div>
@@ -252,6 +257,7 @@ window.doOnLoad = function() {
       success: function (data) {
         $('#api-response').html(JSON.stringify(data, undefined, 2));
         updateMap(data.data);
+        $('#pager').show();
       }
     });
   };
@@ -286,7 +292,16 @@ window.doOnLoad = function() {
     }
   };
 
-  var makeParams = function() {
+  var makeParams = function(offset) {
+    // We're doing this instead of always using an offset of 0 so the 
+    // displayed URL/query params don't contain unnecessary info.
+    if(offset && offset > 0) {
+      queryParams.offset = offset;
+    }
+    else {
+      delete queryParams.offset;
+    }
+
     var params = $.param(queryParams);
     var paramString = '';
 
@@ -416,6 +431,7 @@ window.doOnLoad = function() {
   });
   $('#text').keyup(textSearch);
 
+  // Date Range
   var pickers = $('#after, #before').datepicker({format: 'yyyy-mm-dd'})
     .on('changeDate', function(ev) {
       var $target = $(ev.target);
@@ -440,6 +456,32 @@ window.doOnLoad = function() {
 
   $('#remove-after').on('click', function(ev) {
     removeDate(ev, 'after');
+  });
+
+  // Pager
+  var curOffset = 0;
+  var pageAmount = 25;
+
+  $('#next').on('click', function(e) {
+    e.preventDefault();
+    curOffset += pageAmount;
+    var paramString = makeParams(curOffset);
+    pingAPI(baseAPIURL+paramString);
+
+    $('#prev').parent('li').removeClass('disabled');
+  });
+
+  $('#prev').on('click', function(e) {
+    e.preventDefault();
+    curOffset -= pageAmount;
+    if(curOffset <= 0) {
+      curOffset = 0;
+      $(this).parent('li').addClass('disabled');
+    }
+
+    var paramString = makeParams(curOffset);
+    pingAPI(baseAPIURL+paramString);
+
   });
 
 };

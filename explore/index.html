@@ -300,6 +300,7 @@ window.doOnLoad = function() {
     }
     else {
       delete queryParams.offset;
+      curOffset = 0;
     }
 
     var params = $.param(queryParams);

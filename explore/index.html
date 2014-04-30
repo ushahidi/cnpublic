@@ -77,6 +77,24 @@ title: About CrisisNET
 
           <hr>
 
+          <strong>Date Range</strong>
+          <div class="row" style="margin-top:10px">
+            <div style="padding-left:0" id="after" class="input-append date col-xs-6 form-group">
+              <label>From</label>
+              <a class="text-control" style="display:none;float:none;" href="#" id="remove-after"><span class="glyphicon glyphicon-remove-circle"></span> Clear date</a>
+              <input type="text" class="form-control" placeholder="From">
+              <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+            <div style="padding-right:0" id="before" class="input-append date col-xs-6 form-group">
+              <label>To</label>
+              <a class="text-control" style="display:none;float:none;" href="#" id="remove-before"><span class="glyphicon glyphicon-remove-circle"></span> Clear date</a>
+              <input type="text" class="form-control" placeholder="To">
+              <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+          </div>
+
+          <hr>
+
           <strong>Tags</strong> <a class="text-control" href="#" id="toggle-tags">Show</a>
           <div id="all-tags" style="display:none;overflow:hidden;">
             <h4>Conflict</h4>
@@ -141,6 +159,7 @@ title: About CrisisNET
 <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="/scripts/markercluster.js"></script>
 <script>
+
 window.doOnLoad = function() {
   var checkboxes = '<% _.each(tags, function(tag) { %> \
     <div class="checkbox"><label>\
@@ -396,5 +415,32 @@ window.doOnLoad = function() {
     }
   });
   $('#text').keyup(textSearch);
+
+  var pickers = $('#after, #before').datepicker({format: 'yyyy-mm-dd'})
+    .on('changeDate', function(ev) {
+      var $target = $(ev.target);
+      $('#remove-before, #remove-after').css("display", "block");
+      queryParams[$target.attr('id')] = $target.find('input').first().val();
+      var paramString = makeParams();
+      pingAPI(baseAPIURL+paramString);
+      $('.datepicker').hide();
+  });
+
+  var removeDate = function(ev, name) {
+    ev.preventDefault();
+    delete queryParams[name];
+    $('#'+name).find('input').first().val('');
+    var paramString = makeParams();
+    pingAPI(baseAPIURL+paramString);
+  };
+
+  $('#remove-before').on('click', function(ev) {
+    removeDate(ev, 'before');
+  });
+
+  $('#remove-after').on('click', function(ev) {
+    removeDate(ev, 'after');
+  });
+
 };
 </script>

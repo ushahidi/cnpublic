@@ -371,7 +371,7 @@ window.doOnLoad = function() {
 
     $('#location').val('');
     delete queryParams.location;
-    delete queryParams.maxDistance;
+    delete queryParams.distance;
     var paramString = makeParams();
     pingAPI(baseAPIURL+paramString);
     streetMap.setCenter(mapCenter);

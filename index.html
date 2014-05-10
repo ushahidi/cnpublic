@@ -138,7 +138,7 @@ window.doOnLoad = function() {
     var randomTagString = randomTags.join(",");
 
     $.ajax({
-      url: 'http://devapi.crisis.net/item?limit=300',
+      url: 'http://devapi.crisis.net/item?sources=gdelt&limit=300',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

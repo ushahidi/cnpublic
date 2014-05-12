@@ -256,7 +256,7 @@ var setRows = function(rows) {
 var currentMousePos = { x: -1, y: -1 };
 window.doOnLoad = function() {
   $.ajax({
-    url: 'http://devapi.crisis.net/item?placeName=syria&limit=50',
+    url: 'http://devapi.crisis.net/item?placeName=syria&limit=50&tags=conflict',
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

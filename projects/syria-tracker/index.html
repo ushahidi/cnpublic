@@ -80,7 +80,8 @@ title: About CrisisNET
 <div class="row content text-content">
   <div class="col-md-9">
     <h2>Syria Tracker</h2>
-    <p>Monitoring the conflict in Syria currently requires reading thousands of Facebook and YouTube pages in addition to information published by traditional media and non-profit organizations. Using the CrisisNET platform we were combined these thousands of sources into a single stream of continuously updated, real-time data.</p>
+    <p>Monitoring the conflict in Syria currently requires manually consuming thousands of Facebook and YouTube pages in addition to information published by traditional media and non-profit organizations. Using the <a href="http://crisis.net">CrisisNET platform</a> we were combined these thousands of sources into a single stream of continuously updated, real-time data. </p>
+    <p>CrisisNET is currently in private alpha until June, but you can <a href="http://crisis.net">sign up for our mailing list</a> and we'll let you know when it's public.</p>
   </div>
 </div>
 
@@ -127,13 +128,13 @@ title: About CrisisNET
 
 <div class="row content text-content">
   <h3>Code Examples</h3>
-  <p>After <a href="http://devapi.crisis.net">registering with CrisisNET</a> you'll get an API key. Then just grab what you need in 10 lines of code using JavaScript (or your any language that can make HTTP requests).
+  <p>Getting data from CrisisNET couldn't be easier. Below is a simple example in JavaScript showing how to retrieve the 100 most recent incidents about Syria. <strong>We're currently in private alpha until June, but you can <a href="http://crisis.net">sign up for our mailing list</a> and we'll let you know when it's public.</p>
   <pre>
 $.ajax({
   url: 'http://devapi.crisis.net/item?placeName=syria&limit=100',
   dataType: "json",
   beforeSend: function(xhr) {
-    xhr.setRequestHeader('Authorization', 'Bearer <YOUR TOKEN HERE>');
+    xhr.setRequestHeader('Authorization', 'Bearer YOUR API KEY');
   },
   success: function (data) {
     console.log(data);

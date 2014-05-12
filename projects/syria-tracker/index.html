@@ -1,0 +1,441 @@
+---
+layout: default
+title: About CrisisNET
+---
+
+<style>
+  .border {
+    fill: brown;
+    fill-opacity: .2;
+    stroke: brown;
+    stroke-opacity: .1;
+  }
+  .border.active {
+    stroke-opacity: .3;
+    stroke-width: 3;
+    transition: 300ms;
+  }
+  .border-city {
+    stroke: #444;
+  }
+
+  .pin-label {
+    font-color: #efefef;
+  }
+
+  .count-0 {
+    fill-opacity: .2;
+  }
+  .count-1 {
+    fill-opacity: .3;
+  }
+  .count-2 {
+    fill-opacity: .3;
+  }
+  .count-3 {
+    fill-opacity: .4;
+  }
+  .count-4 {
+    fill-opacity: .4;
+  }
+  .count-5 {
+    fill-opacity: .5;
+  }
+  .count-6 {
+    fill-opacity: .5;
+  }
+  .count-7 {
+    fill-opacity: .6;
+  }
+  .count-8 {
+    fill-opacity: .6;
+  }
+  .count-9 {
+    fill-opacity: .7;
+  }
+  .count-10 {
+    fill-opacity: .8;
+  }
+  .count-11 {
+    fill-opacity: .9;
+  }
+  .count-12 {
+    fill-opacity: 1;
+  }
+
+  .tooltip {
+    padding: 6px 12px;
+    background: #fff;
+  }
+</style>
+<link rel="stylesheet" href="/projects/syria-tracker/nv.d3.min.css">
+
+<div class="header-wrap header-wrap-short"><div class="header">
+{% include nav.html %}
+</div></div>
+
+<div class="row content text-content">
+  <div class="col-md-9">
+    <h2>Syria Tracker</h2>
+    <p>Monitoring the conflict in Syria currently requires reading thousands of Facebook and YouTube pages in addition to information published by traditional media and non-profit organizations. Using the CrisisNET platform we were combined these thousands of sources into a single stream of continuously updated, real-time data.</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="row content text-content">
+  <div class="col-md-9">
+    <h3>Conflict Heatmap</h3>
+    <p style="width:50%">This visualization shows the relative level of conflict across the country using descriptions of violence in news outlets, social media, and published non-profit datasets.</p> 
+  </div>
+</div>
+
+<div class="row" style="position:relative;top:-230px">
+  <div id="map" style="margin-bottom: -550px"></div>
+</div>
+<!--
+<hr>
+
+<div class="row">
+  <div id="chart"><svg></svg></div>
+</div>
+-->
+<hr>
+
+<div class="row content">
+<h3>Raw Data</h3>
+<p>Below are the 50 most recent documents from CrisisNET related to Syria. You'll see that we automatically augment data as it comes into our platform so it's categorized, geolocated and translated into English.</p> 
+<table class="table table-striped table-bordered">
+  <thead>
+    <th>Publish Time</th>
+    <th>Tags</th>
+    <th>Content</th>
+    <th>Translation</th>
+    <th>Link</th>
+    <th>Language</th>
+    <th>Image</th>
+    <th>Video</th>
+  </thead>
+  <tbody id="datarows"></tbody>
+</table>
+</div>
+
+<hr>
+
+<div class="row content text-content">
+  <h3>Code Examples</h3>
+  <p>After <a href="http://devapi.crisis.net">registering with CrisisNET</a> you'll get an API key. Then just grab what you need in 10 lines of code using JavaScript (or your any language that can make HTTP requests).
+  <pre>
+$.ajax({
+  url: 'http://devapi.crisis.net/item?placeName=syria&limit=100',
+  dataType: "json",
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer <YOUR TOKEN HERE>');
+  },
+  success: function (data) {
+    console.log(data);
+  }
+});
+  </pre>
+</div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+<script src="/projects/syria-tracker/nv.d3.min.js"></script>
+<script src="/projects/syria-tracker/moment-range.js"></script>
+
+<script>
+
+var width = 1000,
+    height = 1100;
+
+var projection = d3.geo.conicConformal()
+    .center([38.996815, 34.802075])
+    .clipAngle(180)
+    .scale(10000)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+var svg = d3.select("#map").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+
+var setRows = function(rows) {
+  var maketd = function(text) {
+    return $('<td>', { text: text });
+  };
+
+  var $table = $('#datarows');
+
+  $.each(rows, function(i, row) {
+    var $tr = $('<tr>');
+    
+    $tr.append(maketd(moment(row.publishedAt).fromNow()));
+
+    var tagString = "";
+    if(row.tags) {
+      $.each(row.tags, function(i, tag) {
+        tagString += tag.name + " ";
+      });
+    }
+    $tr.append(maketd(tagString));
+
+    $table.append($tr);
+
+
+    if(row.content) {
+      $tr.append(maketd(row.content.substring(0,200) + '...'));
+    }
+    else {
+      $tr.append(maketd(""));
+    }
+
+    if(row.contentEnglish) {
+      $tr.append(maketd(row.contentEnglish.substring(0,200) + '...'));
+    }
+    else {
+      $tr.append(maketd(""));
+    }
+    
+    var $linktd = maketd("");
+    $linktd.html('<a href="'+row.fromURL+'">link</a>');
+    $tr.append($linktd);
+
+    if(row.language) {
+      $tr.append(maketd(row.language.name));
+    }
+    else {
+      $tr.append(maketd(""));
+    }
+    
+    var $imgtd = maketd("");
+    if(row.image) {
+      $imgtd.html('<img src="'+row.image+'">');
+    }
+    $tr.append($imgtd);
+
+    var $vidtd = maketd("");
+    if(row.video) {
+      $vidtd.html('<a href="'+row.video+'">video link</a>');
+    }
+    $tr.append($vidtd);
+  });
+};
+
+var currentMousePos = { x: -1, y: -1 };
+window.doOnLoad = function() {
+  $.ajax({
+    url: 'http://devapi.crisis.net/item?placeName=syria&limit=50',
+    dataType: "json",
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+    },
+    success: function (data) {
+      
+      buildMap(data.total);
+      setRows(data.data);
+    }
+  });
+
+
+  $(document).mousemove(function(event) {
+      currentMousePos.x = event.pageX;
+      currentMousePos.y = event.pageY;
+  });
+};
+
+
+var setTransparency = function(term, id, totalRecords, callback) {
+  $.ajax({
+    url: 'http://devapi.crisis.net/item?countOnly=true&after=2014-04-01&text='+term,
+    dataType: "json",
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+    },
+    success: function (data) {
+      if(data.total > 0) {
+        data.total = data.total * 2;
+      }
+      var count = Math.ceil(data.total / totalRecords * 1000);
+      if(count > 12) {
+        count = 12;
+      }
+      callback('count-' + count.toString(), data.total);
+    }
+  });
+};
+
+var buildMap = function(totalRecords) {
+  var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .attr('class', 'tooltip')
+    .text("a simple tooltip");
+
+  d3.json("/projects/syria-tracker/cities.json", function(err, data) {
+    d3.csv("/projects/syria-tracker/incidents.csv", function(err, incidents) {
+
+      //console.log(incidents);
+      
+      $.each(data.features, function(i, feature) {
+          var name = feature.properties.NAME_EN.replace(/\s/g,'').replace(/-/g,'');
+
+          var tooltip = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "white")
+            .style("padding", "4px 8px")
+            .style("font-color", "#444")
+            .style("font-weight", "bold")
+            .text("a simple tooltip");
+
+
+          var cityID = feature.properties.PCODE;
+          var record = _.findWhere(incidents, {cityID: cityID});
+
+          if(!record) {
+            return false;
+          }
+
+          var actualTotal = parseInt(record.totalIncidents);
+          if(actualTotal > 0) {
+            total = actualTotal * 2;
+          }
+          else {
+            total = actualTotal;
+          }
+          var count = Math.ceil(total / totalRecords * 1000);
+          if(count > 12) {
+            count = 12;
+          }
+          
+          var className = 'count-' + count.toString();
+
+          svg.append("path")
+            .datum(feature.geometry)
+            .attr("class", "border "+className)
+            .attr("id", feature.properties.PCODE)
+            .attr('data-name', name)
+            .attr("d", path)
+            .on("mouseover", function(d) {
+                d3.select(this).classed("active", true );
+                tooltip.text(feature.properties.NAME_EN + ": " + actualTotal + " incidents")
+                  .style("visibility", "visible");
+              })
+            .on("mousemove", function(){
+              tooltip.style("top", (currentMousePos.y-10)+"px").style("left",(currentMousePos.x+10)+"px");
+            })
+            .on("mouseout",  function(d) {
+              d3.select(this).classed("active", false)
+              tooltip.style('visibility', 'hidden');
+            });
+
+
+          
+
+        }); // each
+        
+        /*
+          setTransparency(name, feature.properties.PCODE, totalRecords, function(className, count) {
+            
+          });
+          */
+
+      }); // get incidents 
+  }); // get Cities
+}; // buildMap
+
+/*
+d3.json('stackedAreaData.json', function(data) {
+  nv.addGraph(function() {
+    var chart = nv.models.stackedAreaChart()
+                  .margin({right: 100})
+                  .x(function(d) { return d[0] })   //We can modify the data accessor functions...
+                  .y(function(d) { return d[1] })   //...in case your data is formatted differently.
+                  .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
+                  .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
+                  .transitionDuration(500)
+                  .showControls(false)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+                  .clipEdge(true);
+
+    //Format x-axis labels with custom function.
+    chart.xAxis
+        .tickFormat(function(d) { 
+          return d3.time.format('%x')(new Date(d)) 
+    });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#chart svg')
+      .datum(data)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+});
+
+var start = moment().subtract('days', 5)
+  , end   = moment().add('days', 1)
+  , range = moment().range(start, end);
+
+var charData = [];
+
+var cats = {
+  'armed-conflict': {
+    []
+  },
+  'air-combat': []
+};
+
+var getCatForDate = function(cat, before, after) {
+  $.ajax({
+      url: 'http://localhost:8083/item?countOnly=true&after='+after+'&before='+before+'&tags='+cat,
+      dataType: "json",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+      },
+      success: function (data) {
+        if(data.total > 0) {
+          data.total = data.total * 2;
+        }
+        var count = Math.ceil(data.total / totalRecords * 1000);
+        if(count > 12) {
+          count = 12;
+        }
+        callback('count-' + count.toString(), data.total);
+      }
+    });
+};
+
+range.by('days', function(moment) {
+  var after = moment.format("YYYY-MM-DD")
+    , before = moment.add('days', 1).format("YYYY-MM-DD");
+
+  _(cats.keys()).each(function(cat) {
+
+  });
+
+
+});
+*/
+
+// armed-conflict
+// air-combat
+// death
+// chemical-warfare
+
+</script>

@@ -67,7 +67,10 @@ title: About CrisisNET
     padding: 6px 12px;
     background: #fff;
   }
+
+ 
 </style>
+
 <link rel="stylesheet" href="/projects/syria-tracker/nv.d3.min.css">
 
 <div class="header-wrap header-wrap-short"><div class="header">
@@ -86,7 +89,7 @@ title: About CrisisNET
 <div class="row content text-content">
   <div class="col-md-9">
     <h3>Conflict Heatmap</h3>
-    <p style="width:50%">This visualization shows the relative level of conflict across the country using descriptions of violence in news outlets, social media, and published non-profit datasets.</p> 
+    <p style="width:50%">This visualization shows the relative level of conflict across the country using descriptions of violence in news outlets, social media, and published non-profit datasets. <strong>Click on a map region to see a recent video from militant groups in that area</strong>.</p> 
   </div>
 </div>
 
@@ -138,6 +141,22 @@ $.ajax({
 });
   </pre>
 </div>
+
+<div id="modal" class="modal fade">
+  <div class="modal-dialog" style="width:680px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modal-title" class="modal-title">Modal title</h4>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
@@ -272,6 +291,24 @@ var setTransparency = function(term, id, totalRecords, callback) {
   });
 };
 
+var getVideo = function(placeName, callback) {
+  $.ajax({
+    url: 'http://devapi.crisis.net/item?sources=youtube_syria&text='+placeName,
+    dataType: "json",
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+    },
+    success: function (data) {
+      if(data.total > 0) {
+        callback(data.data[0]);
+      }
+      else {
+        callback(false);
+      }
+    }
+  });
+};
+
 var buildMap = function(totalRecords) {
   var tooltip = d3.select("body")
     .append("div")
@@ -303,6 +340,7 @@ var buildMap = function(totalRecords) {
 
           var cityID = feature.properties.PCODE;
           var record = _.findWhere(incidents, {cityID: cityID});
+
 
           if(!record) {
             return false;
@@ -339,6 +377,25 @@ var buildMap = function(totalRecords) {
             .on("mouseout",  function(d) {
               d3.select(this).classed("active", false)
               tooltip.style('visibility', 'hidden');
+            })
+            .on("click", function(d) {
+                $('#modal').modal();
+                $('#modal-body').empty();
+                $('#modal-title').text("Loading...");
+                getVideo(name, function(data) {
+                  var title, body;
+                  if(data) {
+                    title = data.summary;
+                    content = '<iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/'+data.remoteID+'?autoplay=1&origin=http://dev.crisis.net" frameborder="0"/>';
+                  }
+                  else {
+                    title = 'None found';
+                    content = 'We did not any recent videos about '+feature.properties.NAME_EN;
+                  }
+                  
+                  $('#modal-title').text(title);
+                  $('#modal-body').html(content);
+                });
             });
 
 

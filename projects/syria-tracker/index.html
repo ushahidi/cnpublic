@@ -374,7 +374,7 @@ var buildMap = function(totalRecords) {
             .attr("d", path)
             .on("mouseover", function(d) {
                 d3.select(this).classed("active", true );
-                tooltip.text(feature.properties.NAME_EN + ": " + actualTotal + " incidents")
+                tooltip.text(feature.properties.NAME_EN + ": " + actualTotal + " reports")
                   .style("visibility", "visible");
               })
             .on("mousemove", function(){

@@ -59,7 +59,8 @@ title: Thai Coup
 <div class="row content text-content">
   <div class="col-md-9">
     <h2>Thai Coup Snapshot</h2>
-    <p>Social media snapshot of this week's military coup in Thailand.</p>
+    <p>On Thursday the Thai military staged a coup. Protest leaders were arrested and international TV networks were shut down as the army moved through the streets of Bangcock declaring martial law. However, at least as of early Friday morning, one of the more remarkable aspects of this unsettling takeover has been Thai citizen's relatively non-chalant response to the crisis. People <a href="http://www.channel4.com/news/selfie-thailand-martial-law-coup-army-military-photograph">are taking selfies</a>, <a href="http://instagram.com/p/oVIHmmJpY4/">posing with soldiers</a> while Twitter users have adopted the hashtag <a href="https://twitter.com/search?q=%23coupmovies&src=tyah">#CoupMovies</a> to make movie-title puns like "<a href="https://twitter.com/gnarlykitty/status/469695581393149952">One Flew Over the Coup Coup's Nest</a>."</p>
+    <p><strong>We used the <a href="http://crisis.net">CrisisNET</a> platform to quickly collect udpates from over 100 Twitter and Instagram accounts, and generated a real-time snapshot of the mood in Thailand. The feed is updated once per minute, refresh the page to see the latest content.</strong></p>
   </div>
 </div>
 
@@ -67,6 +68,25 @@ title: Thai Coup
 
 <div class="row" style="padding-left:25px;">
   <div id="tiles"></div>
+</div>
+
+<hr>
+
+<div class="row content text-content">
+  <h3>Code Examples</h3>
+  <p>Getting data from CrisisNET couldn't be easier. Below is a simple example in JavaScript showing how to retrieve the 100 most recent incidents about Thailand. <strong>We're currently in private alpha until June, but you can <a href="http://crisis.net">sign up for our mailing list</a> and we'll let you know when it's public</strong>.</p>
+  <pre>
+$.ajax({
+  url: 'http://devapi.crisis.net/item?placeName=thailand&limit=100',
+  dataType: "json",
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer YOUR API KEY');
+  },
+  success: function (data) {
+    console.log(data);
+  }
+});
+  </pre>
 </div>
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.1.2/masonry.pkgd.js"></script>

@@ -23,8 +23,17 @@ title: Thai Coup
     margin-bottom: 20px;
   }
 
+  .item p.body-text {
+    width: 400px;
+    padding: 10px;
+    color: #777;
+  }
+
   .item.text {
     background-color: white;
+  }
+
+  .item.text p.body-text {
     font-size: 22px;
   }
 
@@ -97,9 +106,14 @@ var setTiles = function(items) {
     var $body;
 
     if(item.image) {
+      $body = $('<div>');
       var $img = $('<img>', { src: item.image });
       $a.append($img);
-      $body = $a; 
+      var $p = $('<p>', {'class': 'body-text'});
+      var text = item.summary || item.content;
+      $p.text(text.substring(0,150));
+      $body.append($a);
+      $body.append($p);
     }
     else {
       $item.addClass('text');

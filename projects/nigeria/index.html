@@ -1,0 +1,54 @@
+---
+layout: default
+title: Nigeria
+---
+
+<link rel="stylesheet" href="/projects/syria-tracker/nv.d3.min.css">
+
+
+<div id="chart" style="width:1200px">
+  <svg style="height:500px"></svg>
+</div>
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/projects/syria-tracker/nv.d3.min.js"></script>
+
+<script>
+  window.doOnLoad = function() {
+    d3.json('/projects/nigeria/category-counts.json', function(data) {
+      nv.addGraph(function() {
+        var chart = nv.models.stackedAreaChart()
+                      .margin({right: 100})
+                      .x(function(d) { return (new Date(d[0])).getTime() })   //We can modify the data accessor functions...
+                      .y(function(d) { return d[1] })   //...in case your data is formatted differently.
+                      .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
+                      .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
+                      .transitionDuration(500)
+                      .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+                      .clipEdge(true);
+
+        //Format x-axis labels with custom function.
+        
+        chart.xAxis
+            .tickFormat(function(d) { 
+              return d3.time.format('%x')(new Date(d)) 
+        });
+
+        /*
+        chart.yAxis
+            .tickFormat(d3.format(',.2f'));
+        
+        */
+
+        d3.select('#chart svg')
+          .datum(data)
+          .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        return chart;
+      });
+    });
+  };
+</script>

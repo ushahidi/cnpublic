@@ -30,6 +30,27 @@ title: About CrisisNET
 #remove-location:hover {
   text-decoration: none;
 }
+
+.pager {
+  text-align: left;
+  float: left;
+  margin-bottom:0;
+}
+
+.pager .next > a {
+  float: none;
+}
+
+.pager .next {
+  margin-left: 25px;
+}
+
+#download-link {
+  font-weight: bold;
+  float:right;
+  margin-top: 32px;
+}
+
 </style>
 
 <div class="header-wrap header-wrap-short"><div class="header">
@@ -50,11 +71,15 @@ title: About CrisisNET
       <input id="query-params" type="text" class="form-control" placeholder="Query params">
     </div>
 
-    <ul class="pager">
-      <li class="previous disabled"><a id="prev" href="#">&larr; Prev</a></li>
-      <li class="next"><a id="next" href="#">Next &rarr;</a></li>
-    </ul>
+    <div class="clearfix">
+      <ul class="pager">
+        <li class="previous disabled"><a id="prev" href="#">&larr; Prev</a></li>
+        <li class="next"><a id="next" href="#">Next &rarr;</a></li>
+      </ul>
 
+      <a id="download-link">Download Results as CSV</a>
+
+    </div>  
     <pre style="overflow-y:auto;height:300px;margin-top:10px;" id="api-response"></pre>
     <div id="map-canvas" style="height:400px;margin-top:20px;"></div>
   </div>
@@ -256,6 +281,11 @@ window.doOnLoad = function() {
       },
       success: function (data) {
         $('#api-response').html(JSON.stringify(data, undefined, 2));
+        var paramSeparate = '?';
+        if(url.match(/\?/)) {
+          paramSeparate = '&';
+        }
+        $('#download-link').attr('href', url + paramSeparate + "apikey=532d32c7ed3329652f114b70&format=csv");
         updateMap(data.data);
         $('#pager').show();
       }

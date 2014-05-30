@@ -1,0 +1,391 @@
+---
+layout: default
+title: Crisis Tracker
+---
+
+<style>
+
+  #tiles img {
+    max-width: 400px;
+    display:block;
+    margin: 12px auto;
+  }
+
+  .credit {
+    padding: 12px;
+    font-style: italic;
+    color: #999;
+    background: #eee;
+    margin-bottom: 0px;
+  }
+
+  .credit span:after, .credit a:after {
+    content: "•";
+    margin: 0 5px;
+  }
+
+  .credit a:last-of-type:after {
+    content: "";
+  }
+
+  .item {
+    border: 1px solid #efefef;
+    margin-bottom: 30px;
+  }
+
+  .item p.body-text {
+    width: 400px;
+    padding: 10px;
+    color: #777;
+  }
+
+  .item.text {
+    background-color: white;
+  }
+
+  .item.text p.body-text {
+    font-size: 22px;
+  }
+
+  .form-control.inline {
+    width: 135px;
+    display: inline;
+    margin-right: 15px;
+  }
+
+  #view-saved {
+    margin-left: 20px;
+    display:none;
+  }
+
+/*
+  .text p.body-text {
+    quotes: "“" "”" "‘" "’";*/
+    /*max-width: 400px;
+  }
+  .text p.body-text:before {
+      content: open-quote;
+  }
+  .text p.body-text:after {
+      content: close-quote;
+  }
+  */
+ 
+</style>
+
+<link rel="stylesheet" href="/projects/syria-tracker/nv.d3.min.css">
+
+<div class="header-wrap header-wrap-short"><div class="header">
+{% include nav.html %}
+</div></div>
+
+<div class="row content text-content">
+  <div class="col-md-9">
+    <h2>Crisis Tracker</h2>
+    <p>Get real-time updates from the crisis you're following and save important posts for later.</p> 
+    <p><em>Scroll to the bottom of the page to see a simple code example you can use to put this data into your application</em>.</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="row content text-content">
+  <select class="form-control inline">
+    <option id="default-select" value="">Select a region</option>
+    <option data-param="placeName" value="syria" selected>Syria</option>
+    <option data-param="placeName" value="thailand">Thailand</option>
+  </select>
+  <label class="checkbox-inline">
+    <input data-param="hasPhoto" type="checkbox" value="true"> Must have photo
+  </label>
+  <label class="checkbox-inline">
+    <input data-param="hasVideo" type="checkbox" value="true"> Must have video
+  </label>
+  <a href="#" id="view-saved">View Saved Content</a>
+</div>
+
+<hr>
+
+<div class="row" style="padding-left:25px;">
+  <div id="tiles"></div>
+</div>
+
+<hr>
+
+<div class="row content text-content">
+  <h3>Code Examples</h3>
+  <p>Getting data from CrisisNET couldn't be easier. Below is a simple example in JavaScript showing how to retrieve the 100 most recent incidents about Syria (just as an example). Just <a href="http://api.crisis.net">register for an API key</a> to get access.</p>
+  <pre>
+$.ajax({
+  url: 'http://api.crisis.net/item?placeName=Syria&limit=100',
+  dataType: "json",
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer YOUR API KEY');
+  },
+  success: function (data) {
+    console.log(data);
+  }
+});
+  </pre>
+</div>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.1.2/masonry.pkgd.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.4.0/cookies.min.js"></script>
+
+
+<script>
+
+var savedIDs = [];
+var saveMode = false;
+
+window.doOnLoad = function() {
+  // check for ?placeName= in URL
+  var curParams = {
+    placeName: 'Syria'
+  };  
+  getForParams(curParams);
+
+  $('input[type=checkbox]').on('click', function(e) {
+    var $this = $(this);
+    if(curParams[$this.data('param')]) {
+      delete curParams[$this.data('param')];
+    }
+    else {
+      curParams[$this.data('param')] = true;
+    }
+
+    getForParams(curParams);
+  });
+
+  $('select').on('change', function(e) {
+    curParams.placeName = $(this).val();
+
+    if(!_.isEmpty(curParams.placeName)) {
+      getForParams(curParams);
+    }
+  });
+
+  var curIDs = Cookies.get('cn-story-ids');
+  if(curIDs) {
+    savedIDs = curIDs.split(',');
+    $('#view-saved').show();
+  }
+  else {
+    savedIDs = [];
+  }
+  
+  $('#view-saved').on('click', function(e) {
+    e.preventDefault();
+    getForParams({ids: savedIDs.join(',')}, function() {
+      $('a[data-role=save]').text('Unsave');
+      saveMode = true;
+    });
+    $('#default-select').attr('selected', true);
+  });
+};
+
+var getForParams = function(params, cb) {
+  params.limit = 100;
+
+  var params = $.param(params);
+  var paramString = '';
+
+  if(params.length > 0) {
+    paramString = '?' + params;
+  }
+
+  $.ajax({
+    url: 'http://devapi.crisis.net/item'+paramString,
+    dataType: "json",
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
+    },
+    success: function (data) {
+      setTiles(data.data);
+      saveMode = false;
+      if(cb && typeof cb === "function") {
+        cb();
+      }
+    }
+  });
+};
+
+var setTiles = function(items) {
+  var $tiles = $('#tiles');
+
+  $tiles.empty();
+
+  $.each(items, function(idx, item) {
+    var $item = $('<div>', { 'class': 'item ' + item.source });
+
+    var fromURL;
+
+    if(item.source === "twitter" && item.author) {
+      fromURL = "http://twitter.com/" + item.author.username + "/status/" + item.remoteID;
+    }
+    else if(item.source.match("youtube")) {
+      fromURL = "http://youtube.com/" + item.remoteID;
+    }
+    else {
+      fromURL = item.fromURL;
+    }
+
+    var $a = $('<a>', { href: fromURL });
+    var $body;
+
+    if(item.video) {
+      $item.addClass('video');
+      $body = $('<div>');
+      var $content;
+
+      if(item.source.match('youtube')) {
+        $content = '<iframe id="ytplayer" type="text/html" width="420" height="340" src="http://www.youtube.com/embed/'+item.remoteID+'?&origin=http://dev.crisis.net" frameborder="0"/>'
+      }
+      else if(item.source.match('facebook')) {
+        $content = '<video width="420" height="340" controls><source src="'+item.video+'" type="video/mp4">Your browser does not support the video tag.</video>';
+      }
+
+      if($content) {
+        var $p = $('<p>', {'class': 'body-text'});
+        var text = item.summary || item.content;
+        $p.text(text.substring(0,150));
+        $body.append($content);
+        $body.append($p);
+      }
+
+      if(item.contentEnglish) {
+        var $pe = $('<p>', {'class': 'body-text'});
+        $pe.html("<strong>Translation</strong>: " + item.contentEnglish.substring(0,150));
+        $body.append($pe);
+      }
+    }
+
+    else if(item.image) {
+      $item.addClass('image');
+      $body = $('<div>');
+      var $content;
+
+      if(item.image.match('.mp4')) {
+        $content = '<iframe src="'+item.fromURL+'embed/" width="400" height="410" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
+      }
+      else {
+        var $img = $('<img>', { src: item.image });
+        $a.append($img);
+        $content = $a;
+      }
+      var $p = $('<p>', {'class': 'body-text'});
+      var text = item.summary || item.content;
+      $p.text(text.substring(0,150));
+
+      $body.append($content);
+      $body.append($p);
+
+      if(item.contentEnglish) {
+        var $pe = $('<p>', {'class': 'body-text'});
+        $pe.html("<strong>Translation</strong>: " + item.contentEnglish.substring(0,150));
+        $body.append($pe);
+      }
+    }
+    else {
+      $item.addClass('text');
+      $body = $('<p>', {'class': 'body-text'});
+      var text = item.summary || item.content;
+      $a.text(text.substring(0,150));
+      $body.append($a);
+
+      if(item.contentEnglish) {
+        var $pe = $('<p>', {'class': 'body-text'});
+        $pe.html("<strong>Translation</strong>: " + item.contentEnglish.substring(0,150));
+        $body.append($pe);
+      }
+    }
+
+    var creditText = moment(item.publishedAt).fromNow();
+    var source = '<strong>' + item.source.split('_')[0] + '</source>';
+
+    if(item.author) {
+      creditText += " by " + item.author.username + " on " + source;
+    }
+    else {
+      creditText += " on " + source;
+    }
+
+    $link = $('<a>', { href: fromURL, text: 'Link' });
+    if(item.tags) {
+      var tags = item.tags.slice(0,2);
+      $tags = $('<span>', { 
+        text: _(tags).reduce(function(memo, tag, idx) { 
+          var newStr = memo + tag.name;
+          if(idx + 1 === tags.length) {
+            return newStr;
+          }
+          return newStr + ", ";  
+        }, "")
+      });
+    }
+    $credit = $('<span>', { html: creditText });
+    $saveLink = $('<a>', {
+      href: "#",
+      text: "Save",
+      "data-role": "save",
+      "data-id": item.id
+    });
+
+    $footer = $('<p>', { 'class': 'credit' });
+    $footer.append($link);
+    $footer.append($tags);
+    $footer.append($credit);
+    $footer.append($saveLink);
+
+    $item.append($body);
+    $item.append($footer);
+
+    $tiles.append($item);
+
+  });
+  
+  imagesLoaded( '#tiles', function() {
+    var container = document.querySelector('#tiles');
+    var msnry = new Masonry( container, {
+      itemSelector: '.item',
+      columnWidth: 200,
+      gutter: 15
+    });
+  });
+
+  $('a[data-role=save]').on('click', function(e) {
+    e.preventDefault();
+
+    var $this = $(this);
+    var cur = $this.text();
+
+    if(cur === "Save") {
+      $this.text("Unsave");
+      if(!_(savedIDs).contains($this.data('id'))) {
+        savedIDs.push($this.data('id'));
+
+        $('#view-saved').show();
+      }
+    }
+    else {
+      if(saveMode) {
+        $this.closest('.item').remove();
+      }
+      else {
+        $this.text("Save");
+      }
+      savedIDs = _(savedIDs).without($this.data('id'));
+
+      if(savedIDs.length === 0) {
+        $('#view-saved').hide();
+      }
+    }
+
+    Cookies.set('cn-story-ids', savedIDs.join(','));
+  });
+};
+
+</script>

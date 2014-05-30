@@ -315,10 +315,11 @@ var setTiles = function(items) {
 
     $link = $('<a>', { href: fromURL, text: 'Link' });
     if(item.tags) {
+      var tags = item.tags.slice(0,2);
       $tags = $('<span>', { 
-        text: _(item.tags.slice(0,2)).reduce(function(memo, tag, idx) { 
+        text: _(tags).reduce(function(memo, tag, idx) { 
           var newStr = memo + tag.name;
-          if(idx + 1 === item.tags.length) {
+          if(idx + 1 === tags.length) {
             return newStr;
           }
           return newStr + ", ";  

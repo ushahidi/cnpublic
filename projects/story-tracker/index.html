@@ -316,7 +316,7 @@ var setTiles = function(items) {
     $link = $('<a>', { href: fromURL, text: 'Link' });
     if(item.tags) {
       $tags = $('<span>', { 
-        text: _(item.tags).reduce(function(memo, tag, idx) { 
+        text: _(item.tags.slice(0,2)).reduce(function(memo, tag, idx) { 
           var newStr = memo + tag.name;
           if(idx + 1 === item.tags.length) {
             return newStr;

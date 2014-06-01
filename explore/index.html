@@ -67,7 +67,7 @@ title: About CrisisNET
 <div class="row content text-content">
   <div class="col-md-9">
     <div class="input-group">
-      <span class="input-group-addon">http://devapi.crisis.net/item</span>
+      <span class="input-group-addon">http://api.crisis.net/item</span>
       <input id="query-params" type="text" class="form-control" placeholder="Query params">
     </div>
 
@@ -172,7 +172,22 @@ title: About CrisisNET
           </div>
           <div class="checkbox">
             <label>
-              <input data-type="sources" value="gdelt" type="checkbox"> GDELT
+              <input data-type="sources" value="facebook" type="checkbox"> Facebook
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="twitter" type="checkbox"> Twitter
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="instagram" type="checkbox"> Instagram
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input data-type="sources" value="vdc_syria" type="checkbox"> Violations Documentation Center in Syria
             </label>
           </div>
           <div class="checkbox">
@@ -198,7 +213,7 @@ window.doOnLoad = function() {
 
   var setTags = function() {
     $.ajax({
-      url: 'http://devapi.crisis.net/system-tag?categories=conflict,disaster',
+      url: 'http://api.crisis.net/system-tag?categories=conflict,disaster',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -292,7 +307,7 @@ window.doOnLoad = function() {
     });
   };
 
-  var baseAPIURL = 'http://devapi.crisis.net/item';
+  var baseAPIURL = 'http://api.crisis.net/item';
 
   pingAPI(baseAPIURL);
 

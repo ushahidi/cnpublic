@@ -31,7 +31,7 @@ title: CrisisNET
         <h2>Crisis data, at your fingertips</h2>
         <p>CrisisNET finds, formats and exposes crisis data in a simple, intuitive structure that’s accessible anywhere. Now developers, journalists and analysts can skip the days of tedious data processing and get to work in minutes with only a few lines of code.</p>
         <p><blockquote>Focus on what you care about: visualizations, analysis & building the next amazing crisis app.</blockquote></p>
-        <p><a class="btn btn-green" href="/about">Learn More <span class="glyphicon glyphicon-ok"></span></a></p>
+        <p><a class="btn btn-green" href="http://api.crisis.net">Sign Up <span class="glyphicon glyphicon-ok"></span></a></p>
     </div>
 
     <div class="col-md-5">
@@ -61,7 +61,6 @@ title: CrisisNET
       <h2>An intuitive, powerful API</h2>
       <p><strong><em>Our API is designed for blazing speed and maximum flexibility.</em></strong></p>
       <p>We give you the power to search, refine and filter massive amounts of information into a single stream of curated crisis data. Using a straightforward REST interface, you can retrieve exactly what you need using your favorite programming language with only a few lines of code.</p>
-      We're currently in private alpha until June, but you can <a href="http://crisis.net">sign up for our mailing list</a> and we'll let you know when it's public.
       <p><a class="btn btn-orange" href="/explore">Explore the API <span class="glyphicon glyphicon-ok"></span></a></p>
   </div>
   <div class="col-md-6 col-md-offset-1">
@@ -86,7 +85,7 @@ $.getJSON(url + '?location=' + location, function(data) {
 
 <div class="row well text-center call-out">
   <h2>Ready to Get Started?</h2>
-  <p><a class="btn btn-white" href="http://crisis.net">Get Notified <span class="glyphicon glyphicon-ok"></span></a></p>
+  <p><a class="btn btn-white" href="http://api.crisis.net">Get an Account <span class="glyphicon glyphicon-ok"></span></a></p>
 </div>
 
 <!--
@@ -110,7 +109,7 @@ window.doOnLoad = function() {
 
   var getTags = function(cb) {
     $.ajax({
-      url: 'http://devapi.crisis.net/system-tag',
+      url: 'http://api.crisis.net/system-tag',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -139,7 +138,7 @@ window.doOnLoad = function() {
     var randomTagString = randomTags.join(",");
 
     $.ajax({
-      url: 'http://devapi.crisis.net/item?sources=gdelt&limit=300',
+      url: 'http://api.crisis.net/item?limit=300',
       dataType: "json",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

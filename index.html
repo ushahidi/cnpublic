@@ -8,12 +8,11 @@ title: CrisisNET
       {% include nav.html %}
 
       <div class="jumbotron clearfix">
-          <div class="col-md-11">
-              <h1 class="text-right">CrisisNET</h1>
-              <p class="lead text-right">The firehose of <strong>global crisis data</strong>.
-                <br><small><em>* Currently in private alpha</em></small></p>
-              <p class="text-right"><a class="btn btn-white" href="/about">Learn More &nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></a></p>
-              <canvas class="hidden-xs" id='rotatingGlobe' width='750' height='750'></canvas>
+          <div class="col-md-12">
+              <!-- <h1 class="text-right">CrisisNET</h1> -->
+              <p style="margin-top: 40px;" class="lead">The firehose of <strong>global crisis data</strong></p>
+              <p><a class="btn btn-white" href="/about">Learn More &nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span></a></p>
+              <!-- <canvas class="hidden-xs" id='rotatingGlobe' width='750' height='750'></canvas> -->
               <!-- <img class="hero-static hidden-xs" src="images/hero.png"> -->
           </div>
           <div class="col-md-1"></div>
@@ -21,9 +20,11 @@ title: CrisisNET
   </div><!-- .header -->
 </div><!-- .header-wrap -->
 
+<!--
 <div class="well well-sm tight-top hidden-xs">
   <p>The visualization above is generated in real-time from the CrisisNET API. It shows a random selection of recent crisis incidents.</p>
 </div>
+-->
 
 <div class="row content">
   <div class="clearfix">
@@ -31,7 +32,7 @@ title: CrisisNET
         <h2>Crisis data, at your fingertips</h2>
         <p>CrisisNET finds, formats and exposes crisis data in a simple, intuitive structure that’s accessible anywhere. Now developers, journalists and analysts can skip the days of tedious data processing and get to work in minutes with only a few lines of code.</p>
         <p><blockquote>Focus on what you care about: visualizations, analysis & building the next amazing crisis app.</blockquote></p>
-        <p><a class="btn btn-green" href="http://api.crisis.net">Sign Up <span class="glyphicon glyphicon-ok"></span></a></p>
+        <p><a class="btn btn-green" href="http://api.crisis.net">Get Your API Key <span class="glyphicon glyphicon-ok"></span></a></p>
     </div>
 
     <div class="col-md-5">
@@ -105,7 +106,7 @@ $.getJSON(url + '?location=' + location, function(data) {
 <script>
 
 window.doOnLoad = function() {
-  CN.initMainVis();
+  //CN.initMainVis();
 
   var getTags = function(cb) {
     $.ajax({
@@ -144,7 +145,7 @@ window.doOnLoad = function() {
         xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
       },
       success: function (data) {
-        CN.doVis(data.data);
+        //CN.doVis(data.data);
         CN.doVis2(data.data);
       }
     });

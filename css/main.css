@@ -7701,7 +7701,7 @@ h2 {
 
 /* line 97, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .header-wrap {
-  background: #333334;
+  background: url("/images/tentsbg.jpg");
 }
 
 /* line 102, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
@@ -7827,11 +7827,17 @@ pre.prettyprint {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
   padding-top: 0px;
+  padding-bottom: 100px;
   margin-top: -18px;
   overflow: hidden;
 }
 
-/* line 212, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 213, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+.jumbotron p.lead {
+  font-size: 36px;
+}
+
+/* line 217, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 #rotatingGlobe {
   width: 750px;
   height: 750px;
@@ -7843,77 +7849,77 @@ pre.prettyprint {
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* line 223, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+  /* line 228, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
   .container {
     max-width: 730px;
   }
 
   /* Space out the masthead */
-  /* line 228, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+  /* line 233, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
   .header {
     margin-bottom: 30px;
   }
 
   /* Remove the bottom border on the jumbotron for visual effect */
-  /* line 233, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+  /* line 238, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
   .jumbotron {
     border-bottom: 0;
   }
 }
 /* syntax highlighting */
-/* line 241, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 246, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight {
   background: #ffffff;
 }
 
-/* line 242, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 247, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .c {
   color: #999988;
   font-style: italic;
 }
 
 /* Comment */
-/* line 243, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 248, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .err {
   color: #a61717;
   background-color: #e3d2d2;
 }
 
 /* Error */
-/* line 244, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 249, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .k {
   font-weight: bold;
 }
 
 /* Keyword */
-/* line 245, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 250, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .o {
   font-weight: bold;
 }
 
 /* Operator */
-/* line 246, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 251, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .cm {
   color: #999988;
   font-style: italic;
 }
 
 /* Comment.Multiline */
-/* line 247, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 252, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .cp {
   color: #999999;
   font-weight: bold;
 }
 
 /* Comment.Preproc */
-/* line 248, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 253, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .c1 {
   color: #999988;
   font-style: italic;
 }
 
 /* Comment.Single */
-/* line 249, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 254, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .cs {
   color: #999999;
   font-weight: bold;
@@ -7921,315 +7927,315 @@ pre.prettyprint {
 }
 
 /* Comment.Special */
-/* line 250, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 255, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gd {
   color: #000000;
   background-color: #ffdddd;
 }
 
 /* Generic.Deleted */
-/* line 251, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 256, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gd .x {
   color: #000000;
   background-color: #ffaaaa;
 }
 
 /* Generic.Deleted.Specific */
-/* line 252, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 257, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .ge {
   font-style: italic;
 }
 
 /* Generic.Emph */
-/* line 253, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 258, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gr {
   color: #aa0000;
 }
 
 /* Generic.Error */
-/* line 254, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 259, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gh {
   color: #999999;
 }
 
 /* Generic.Heading */
-/* line 255, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 260, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gi {
   color: #000000;
   background-color: #ddffdd;
 }
 
 /* Generic.Inserted */
-/* line 256, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 261, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gi .x {
   color: #000000;
   background-color: #aaffaa;
 }
 
 /* Generic.Inserted.Specific */
-/* line 257, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 262, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .go {
   color: #888888;
 }
 
 /* Generic.Output */
-/* line 258, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 263, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gp {
   color: #555555;
 }
 
 /* Generic.Prompt */
-/* line 259, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 264, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gs {
   font-weight: bold;
 }
 
 /* Generic.Strong */
-/* line 260, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 265, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gu {
   color: #aaaaaa;
 }
 
 /* Generic.Subheading */
-/* line 261, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 266, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .gt {
   color: #aa0000;
 }
 
 /* Generic.Traceback */
-/* line 262, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 267, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .kc {
   font-weight: bold;
 }
 
 /* Keyword.Constant */
-/* line 263, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 268, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .kd {
   font-weight: bold;
 }
 
 /* Keyword.Declaration */
-/* line 264, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 269, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .kp {
   font-weight: bold;
 }
 
 /* Keyword.Pseudo */
-/* line 265, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 270, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .kr {
   font-weight: bold;
 }
 
 /* Keyword.Reserved */
-/* line 266, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 271, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .kt {
   color: #445588;
   font-weight: bold;
 }
 
 /* Keyword.Type */
-/* line 267, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 272, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .m {
   color: #009999;
 }
 
 /* Literal.Number */
-/* line 268, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 273, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .s {
   color: #dd1144;
 }
 
 /* Literal.String */
-/* line 269, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 274, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .na {
   color: teal;
 }
 
 /* Name.Attribute */
-/* line 270, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 275, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nb {
   color: #0086b3;
 }
 
 /* Name.Builtin */
-/* line 271, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 276, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nc {
   color: #445588;
   font-weight: bold;
 }
 
 /* Name.Class */
-/* line 272, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 277, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .no {
   color: teal;
 }
 
 /* Name.Constant */
-/* line 273, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 278, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .ni {
   color: purple;
 }
 
 /* Name.Entity */
-/* line 274, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 279, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .ne {
   color: #990000;
   font-weight: bold;
 }
 
 /* Name.Exception */
-/* line 275, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 280, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nf {
   color: #990000;
   font-weight: bold;
 }
 
 /* Name.Function */
-/* line 276, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 281, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nn {
   color: #555555;
 }
 
 /* Name.Namespace */
-/* line 277, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 282, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nt {
   color: navy;
 }
 
 /* Name.Tag */
-/* line 278, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 283, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .nv {
   color: teal;
 }
 
 /* Name.Variable */
-/* line 279, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 284, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .ow {
   font-weight: bold;
 }
 
 /* Operator.Word */
-/* line 280, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 285, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .w {
   color: #bbbbbb;
 }
 
 /* Text.Whitespace */
-/* line 281, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 286, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .mf {
   color: #009999;
 }
 
 /* Literal.Number.Float */
-/* line 282, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 287, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .mh {
   color: #009999;
 }
 
 /* Literal.Number.Hex */
-/* line 283, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 288, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .mi {
   color: #009999;
 }
 
 /* Literal.Number.Integer */
-/* line 284, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 289, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .mo {
   color: #009999;
 }
 
 /* Literal.Number.Oct */
-/* line 285, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 290, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sb {
   color: #dd1144;
 }
 
 /* Literal.String.Backtick */
-/* line 286, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 291, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sc {
   color: #dd1144;
 }
 
 /* Literal.String.Char */
-/* line 287, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 292, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sd {
   color: #dd1144;
 }
 
 /* Literal.String.Doc */
-/* line 288, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 293, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .s2 {
   color: #dd1144;
 }
 
 /* Literal.String.Double */
-/* line 289, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 294, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .se {
   color: #dd1144;
 }
 
 /* Literal.String.Escape */
-/* line 290, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 295, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sh {
   color: #dd1144;
 }
 
 /* Literal.String.Heredoc */
-/* line 291, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 296, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .si {
   color: #dd1144;
 }
 
 /* Literal.String.Interpol */
-/* line 292, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 297, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sx {
   color: #dd1144;
 }
 
 /* Literal.String.Other */
-/* line 293, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 298, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .sr {
   color: #009926;
 }
 
 /* Literal.String.Regex */
-/* line 294, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 299, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .s1 {
   color: #dd1144;
 }
 
 /* Literal.String.Single */
-/* line 295, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 300, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .ss {
   color: #990073;
 }
 
 /* Literal.String.Symbol */
-/* line 296, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 301, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .bp {
   color: #999999;
 }
 
 /* Name.Builtin.Pseudo */
-/* line 297, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 302, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .vc {
   color: teal;
 }
 
 /* Name.Variable.Class */
-/* line 298, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 303, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .vg {
   color: teal;
 }
 
 /* Name.Variable.Global */
-/* line 299, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 304, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .vi {
   color: teal;
 }
 
 /* Name.Variable.Instance */
-/* line 300, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
+/* line 305, /Users/jonathonmorgan/Documents/Ushahidi/CrisisNet/code/cnpublic/css/main.scss */
 .highlight .il {
   color: #009999;
 }

@@ -95,7 +95,7 @@ h2 {
 }
 
 .header-wrap {
-    background: #333334;
+    background: url('/images/tentsbg.jpg');
 }
 
 .header-wrap-short {
@@ -205,8 +205,13 @@ pre.prettyprint {
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
     padding-top: 0px;
+    padding-bottom: 100px;
     margin-top: -18px;
     overflow:hidden;
+}
+
+.jumbotron p.lead {
+    font-size: 36px;
 }
 
 #rotatingGlobe {

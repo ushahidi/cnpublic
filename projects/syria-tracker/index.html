@@ -136,7 +136,7 @@ title: Mapping the Syrian Conflict with Social Media
   <p>Getting data from CrisisNET couldn't be easier. Below is a simple example in JavaScript showing how to retrieve the 100 most recent incidents about Syria. <strong>We're currently in private alpha until June, but you can <a href="http://crisis.net">sign up for our mailing list</a> and we'll let you know when it's public</strong>.</p>
   <pre>
 $.ajax({
-  url: 'http://devapi.crisis.net/item?placeName=syria&limit=100',
+  url: 'http://api.crisis.net/item?placeName=syria&limit=100',
   dataType: "json",
   beforeSend: function(xhr) {
     xhr.setRequestHeader('Authorization', 'Bearer YOUR API KEY');
@@ -257,7 +257,7 @@ var setRows = function(rows) {
 var currentMousePos = { x: -1, y: -1 };
 window.doOnLoad = function() {
   $.ajax({
-    url: 'http://devapi.crisis.net/item?placeName=syria&limit=50&tags=conflict',
+    url: 'http://api.crisis.net/item?placeName=syria&limit=50&tags=conflict',
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -279,7 +279,7 @@ window.doOnLoad = function() {
 
 var setTransparency = function(term, id, totalRecords, callback) {
   $.ajax({
-    url: 'http://devapi.crisis.net/item?countOnly=true&after=2014-04-01&text='+term,
+    url: 'http://api.crisis.net/item?countOnly=true&after=2014-04-01&text='+term,
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -299,7 +299,7 @@ var setTransparency = function(term, id, totalRecords, callback) {
 
 var getVideo = function(placeName, callback) {
   $.ajax({
-    url: 'http://devapi.crisis.net/item?sources=youtube_syria&text='+placeName,
+    url: 'http://api.crisis.net/item?sources=youtube_syria&text='+placeName,
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
@@ -419,86 +419,6 @@ var buildMap = function(totalRecords) {
   }); // get Cities
 }; // buildMap
 
-/*
-d3.json('stackedAreaData.json', function(data) {
-  nv.addGraph(function() {
-    var chart = nv.models.stackedAreaChart()
-                  .margin({right: 100})
-                  .x(function(d) { return d[0] })   //We can modify the data accessor functions...
-                  .y(function(d) { return d[1] })   //...in case your data is formatted differently.
-                  .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
-                  .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
-                  .transitionDuration(500)
-                  .showControls(false)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
-                  .clipEdge(true);
-
-    //Format x-axis labels with custom function.
-    chart.xAxis
-        .tickFormat(function(d) { 
-          return d3.time.format('%x')(new Date(d)) 
-    });
-
-    chart.yAxis
-        .tickFormat(d3.format(',.2f'));
-
-    d3.select('#chart svg')
-      .datum(data)
-      .call(chart);
-
-    nv.utils.windowResize(chart.update);
-
-    return chart;
-  });
-});
-
-var start = moment().subtract('days', 5)
-  , end   = moment().add('days', 1)
-  , range = moment().range(start, end);
-
-var charData = [];
-
-var cats = {
-  'armed-conflict': {
-    []
-  },
-  'air-combat': []
-};
-
-var getCatForDate = function(cat, before, after) {
-  $.ajax({
-      url: 'http://localhost:8083/item?countOnly=true&after='+after+'&before='+before+'&tags='+cat,
-      dataType: "json",
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');
-      },
-      success: function (data) {
-        if(data.total > 0) {
-          data.total = data.total * 2;
-        }
-        var count = Math.ceil(data.total / totalRecords * 1000);
-        if(count > 12) {
-          count = 12;
-        }
-        callback('count-' + count.toString(), data.total);
-      }
-    });
-};
-
-range.by('days', function(moment) {
-  var after = moment.format("YYYY-MM-DD")
-    , before = moment.add('days', 1).format("YYYY-MM-DD");
-
-  _(cats.keys()).each(function(cat) {
-
-  });
-
-
-});
-*/
-
-// armed-conflict
-// air-combat
-// death
-// chemical-warfare
+ 
 
 </script>

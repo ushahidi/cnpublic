@@ -71,10 +71,8 @@ title: CrisisNET
         </div>
         <div class="panel-body">
           {% highlight javascript %}
-var url = 'http://devapi.crisis.net/item',
-location = '36.821946,-1.292066';
 
-$.getJSON(url + '?location=' + location, function(data) {
+$.getJSON('http://api.crisis.net/item?placeName=syria', function(data) {
   console.log(data);
 });
           {% endhighlight %}

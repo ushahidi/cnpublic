@@ -299,7 +299,7 @@ var setTransparency = function(term, id, totalRecords, callback) {
 
 var getVideo = function(placeName, callback) {
   $.ajax({
-    url: 'http://api.crisis.net/item?sources=youtube_syria&text='+placeName,
+    url: 'http://api.crisis.net/item?sources=youtube&text='+placeName,
     dataType: "json",
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Authorization', 'Bearer 532d32c7ed3329652f114b70');

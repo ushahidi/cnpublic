@@ -1,0 +1,707 @@
+<html>
+<head>
+  <style>
+    .border {
+      fill:#777;
+      stroke: #999;
+      stroke-opacity: .1;
+      fill-opacity: .2;
+    }
+
+    .hide {
+      opacity:0;
+    }
+
+    .border.shaded.clear {
+      fill: #777;
+      fill-opacity: .2;
+      transition: 500ms;
+    }
+
+    .active {
+      stroke-opacity: .3;
+      stroke-width: 3;
+      transition: 300ms;
+      stroke: #efefef;
+    }
+
+    .active:hover {
+      cursor: pointer;
+    }
+
+    .circle {
+      fill:#4eacdd;
+      fill-opacity: .7;
+      transition: 500ms;
+    }
+
+    .circle.red {
+      fill: red;
+    }
+
+    .circle.orange {
+      fill: #f05526;
+    }
+
+    .circle.green {
+      fill: #14af8f;
+    }
+
+    .circle.black {
+      fill: #545454;
+    }
+
+    .rect {
+      fill: #545454;
+    }
+
+    .rect.red {
+      fill: red;
+    }
+    
+    .border.count-10 {
+      fill-opacity: .3;
+      fill: #f05526;
+    }
+
+    .border.count-20 {
+      fill-opacity: .4;
+      fill: #f05526;
+    }
+
+    .border.count-30 {
+      fill-opacity: .5;
+      fill: #f05526;
+    }
+
+    .border.count-40 {
+      fill-opacity: .6;
+      fill: #f05526;
+    }
+
+    .border.count-50 {
+      fill-opacity: .7;
+      fill: #f05526;
+    }
+
+    .border.count-60 {
+      fill-opacity: .8;
+      fill: #f05526;
+    }
+
+    .border.count-70 {
+      fill-opacity: .9;
+      fill: #f05526;
+    }
+
+    .border.count-80 {
+      fill-opacity: 1;
+      fill: #f05526;
+    }
+
+    .tooltip {
+      padding: 6px 12px;
+      background: #fff;
+      border: 1px solid #efefef;
+      font-size: 16px;
+      box-shadow: 6px 6px 5px #ccc;
+    }
+
+    nav {
+      position:relative;
+      z-index: 1;
+      max-width:500px;
+    }
+
+    nav a {
+      display:block;
+    }
+    nav a:hover {
+      cursor: pointer;
+    }
+
+    nav a .text {
+      font-weight: bold;
+    }
+
+    nav .img {
+      width: 11px;
+      height: 11px;
+      display: inline-block;
+    }
+
+    #campToggle .img {
+      background-color: #4eacdd;
+      border-radius: 20px;
+    }
+
+    #idpToggle .img {
+      background-color: #14af8f;
+      border-radius: 20px;
+    }
+
+    #borderToggle .img {
+      background-color: #f05526;
+    }
+
+    #borderToggle .img2 {
+      opacity: .6;
+    }
+
+    #capturedToggle .img {
+      background-color: #545454;
+    }
+
+     #capturedToggle .img2 {
+      opacity: .6
+    }
+
+    /*
+    #map svg {
+      padding-top: 0px;
+      margin-top: -290px;
+      margin-left: 100px;
+    }
+    */
+
+    #map {
+      float: left;
+      width: 640px;
+      margin-left: -300px;
+      margin-top: -33px;
+    }
+
+    .map-description {
+      float: left;
+    }
+
+    #modal img {
+      max-width: 100%;
+    }
+
+    #modal p {
+      font-size: 24px;
+    }
+    
+  </style>
+
+  <link rel="stylesheet" href="bootstrap.css">
+
+</head>
+<body>
+  <div class="container">
+  <div class="row">
+    <div class="map-container">
+      <div id="map"></div>
+      <div class="map-description">
+        <h2>Iraq: An Interactive Snapshot</h2>
+        <p style="width:400px;">This interactive map uses both traditional and social media reports of violence to show the relative intensity of fighting in Iraq, along with refugee and displaced person data from the United Nations. Click on an item in the map to see a recent report from that area (where available).</p>
+
+        <nav class="controls">
+          <a id="campToggle"><span class="img"></span> Syrian refugee camps <span class="text">&#8226; Hide</span></a>
+          <a id="idpToggle"><span class="img"></span> Internally Displaced Persons (IDPs) <span class="text">&#8226; Hide</span></a>
+          <a id="borderToggle"><span class="img"></span> Violence Levels <span class="text">&#8226; Hide</span></a>
+          <a id="capturedToggle"><span class="img"></span> Cities captured by ISIS <span class="text">&#8226; Hide</span></a>
+        </nav>
+      </div>
+  </div>
+</div>
+
+  <div id="modal" class="modal fade">
+  <div class="modal-dialog" style="width:680px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modal-title" class="modal-title">Modal title</h4>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+  <script src="plugins.js"></script>
+  
+  <script>
+
+    var ids = {
+      Mosul: 'AFAFLBMEQ860joDHUbRcJA',
+      Erbil: 'vAOEJyaATmySCrCdjcmwMA',
+      Ninewa: 'fbd3p_siQ8iOGTw0F0o4RA',
+      Duhok: 'NjsHuBVNRbiUy4We80YSOQ',
+      Kirkuk: 'ZJDK1NEARoKFPURgF19WFA',
+      Sulaymaniyah: 'WteqTSEGQG-MANEBpF6nnw',
+      Diyala: 'bpR1TX7gTTipOFLNzBXKMg',
+      Anbar: '_rpqpFuRSdu5jl1r-n3kvg',
+      Baghdad: '7LTQUnvWSMCLoS8nNb6eww',
+      Missan: 'YvcXbe2KR0yO445YF00iyg',
+      Kerbala: 'iRzUZ4xBRq6FRt_Uo-10uw',
+      Najaf: 'zpSbwod4SQKBkJFUYOFJmA',
+      'Basra Province': 'pdAWFvoVSFal4C1sk-Ao-Q',
+      Tikrit: 'a7mF9mUuTq-ww9tAXtwduA',
+      Baiji: 'PpHgcOLzT4ibaWljREhYZw',
+      Samarra: 'Ty6BDuALQsy-qXaUQTEu4A',
+      Balad: 'YAKp7d0iRV2_QdYCdItw9w',
+      Ramadi: '_rpqpFuRSdu5jl1r-n3kvg',
+      Dhuluiya: 'sP1gUeRwQdaK3rY2drHVUQ',
+      Saqlawia: '95urVTEdSp2smBfkiCD8_Q',
+      Anah: 'GKRZqfgNQxGGIl0GpzbGBg'
+    }
+
+    var width = 1000,
+    height = 1100;
+
+    var currentMousePos = { x: -1, y: -1 };
+
+    $(document).mousemove(function(event) {
+        currentMousePos.x = event.pageX;
+        currentMousePos.y = event.pageY;
+    });
+
+    var projection = d3.geo.conicConformal()
+        .center([33.9209098,43.7672675])
+        .clipAngle(180)
+        .scale(5000)
+        .translate([-300,-200])
+        .precision(.1);
+
+    var path = d3.geo.path()
+        .projection(projection);
+
+
+    var svg = d3.select("#map").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+
+    var addTooltip = function(obj, text) {
+      var tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .attr('class', 'tooltip')
+        .text("a simple tooltip");
+
+      obj.on("mouseover", function(d) {
+          d3.select(this).classed("active", true );
+          tooltip.text(text)
+            .style("visibility", "visible");
+        })
+      .on("mousemove", function(){
+        tooltip.style("top", (currentMousePos.y-10)+"px").style("left",(currentMousePos.x+10)+"px");
+      })
+      .on("mouseout",  function(d) {
+        d3.select(this).classed("active", false);
+        tooltip.style('visibility', 'hidden');
+      });
+    };
+
+
+    var modalWithId = function(obj, id, label) {
+      obj.on("click", function(d) {
+          $('#modal').modal();
+          $('#modal-body').empty();
+          $('#modal-title').text("Loading...");
+          
+          $.getJSON('http://api.crisis.net/item?ids='+id+'&apikey=532d32c7ed3329652f114b70', function(data) {
+
+            if(data && data.total > 0) {
+              data = data.data[0];
+              var title = 'Recently in '+label;
+              var text = data.content;
+
+              if(data.contentEnglish) {
+                text = data.contentEnglish;
+              }
+
+              var url = data.fromURL;
+
+              if(data.source === 'twitter') {
+                url = 'http://twitter.com/'+data.author.username+'/statuses/'+data.remoteID;
+              }
+
+              content = '<div class="row">';
+              var rowSize = 12;
+              if(data.image) {
+                rowSize = 6;
+                content += '<div class="col-md-'+rowSize+'"><img src="'+data.image+'"></div>'
+              }
+              content += '<div class="col-md-'+rowSize+'"><p>'+text.substring(0,300)+' <strong><a href="'+url+'">Read more on '+data.source[0].toUpperCase() + data.source.slice(1)+'</a></p></div>';
+              content += '</div>';
+            }
+            else {
+              title = 'None found';
+              content = 'There was a problem loading content for '+label;
+            }
+            
+            $('#modal-title').text(title);
+            $('#modal-body').html(content);
+          });
+      });
+    
+    };
+
+
+    var addCircle = function(coords, size, extraClass, opacity, text, label) {
+      var coordinates = projection(coords);
+      if(extraClass) {
+        extraClass = " " + extraClass;
+      }
+      else {
+        extraClass = "";
+      }
+      var circle = svg.append("circle")
+          .attr("cx", coordinates[0])
+          .attr("cy", coordinates[1])
+          .attr("r", size)
+          .attr("class", "circle"+extraClass)
+          .attr('data-label', label);
+
+      if(opacity) {
+        opacity = opacity / 10;
+        if(opacity < .1) {
+          opacity = .1;
+        }
+        if(opacity > .6) {
+          opacity = 1;
+        }
+
+        circle.style("fill-opacity", opacity);
+      }
+
+      addTooltip(circle, text);
+
+      if(ids[label]) {
+        modalWithId(circle,ids[label],label);
+      }
+
+    };
+
+    var makeSize = function(count) {
+      var size = count / 3000;
+
+      if(size < 5) {
+        size = 5;
+      }
+      else if(size > 35) {
+        size = 35
+      };
+
+      return size;
+    };
+
+    var addRect = function(coords,extraClass,opacity,text,label) {
+      var coordinates = projection(coords);
+      if(extraClass) {
+        extraClass = " " + extraClass;
+      }
+      else {
+        extraClass = "";
+      }
+      var rect = svg.append("rect")
+          .attr("x", coordinates[0])
+          .attr("y", coordinates[1])
+          .attr("width", 15)
+          .attr("height", 15)
+          .attr("class", "rect"+extraClass)
+          .attr('data-label', label);
+
+
+      if(opacity) {
+        opacity = opacity / 10;
+        if(opacity < .1) {
+          opacity = .1;
+        }
+        if(opacity > .6) {
+          opacity = 1;
+        }
+
+        rect.style("fill-opacity", opacity);
+      }
+
+      addTooltip(rect, text);
+
+      if(ids[label]) {
+        modalWithId(rect,ids[label],label);
+      }
+    }
+
+
+    d3.json("iraq-cities.json", function(err, data) {
+      //var feature = data[0];
+      
+      $.each(data.features, function(idx, feature) {
+        var name = feature.properties.ADM3NAME.replace(/Al-/g,"").split(" ");
+        if(name.length > 1) {
+          name = name[1];
+        }
+        else {
+          name = name[0];
+        }
+
+        if(name !== "Arab") {
+          $.getJSON('http://api.crisis.net/item?text='+name+'&sources=facebook,twitter&tags=conflict&apikey=532d32c7ed3329652f114b70', function(data) {
+
+            console.log(data.total, name);
+            var count = Math.round((data.total * 1000 / 3119) / 10) * 10;
+
+            if(count > 70) {
+              count = 80;
+            }
+
+            var regionElem = svg.append("path")
+              .datum(feature.geometry)
+              .attr("class", "border")
+              //.attr('class', "border")
+              .attr("d", path)
+              .attr("id", feature.OBJECTID)
+              .attr('data-label', name);
+
+            if(count > 0) {
+              regionElem.classed('count-'+count,true);
+              regionElem.classed('shaded',true);
+            }
+
+            if(count >= 10) {
+              addTooltip(regionElem, numeral(data.total).format("0,0") + " reports of violence in " + name);
+            }
+
+            if(ids[name]) {
+              modalWithId(regionElem,ids[name],name);
+            }
+
+          });
+        }
+
+        
+      });
+
+      //addCircle([41.1292, 34.357235], 25);
+      /*
+      var camps = [
+        {
+          name: 'Anbar',
+          size: 4534,
+          coords: [41.1292, 34.357235]
+        },
+        {
+          name: 'Duhok',
+          size: 103229,
+          coords: [43, 36.866667]
+        },
+        {
+          name: 'Kirkuk',
+          size: 701,
+          coords: [44.316667, 35.466667]
+        },
+        {
+          name: 'Ninewa',
+          size: 1365,
+          coords: [42.236244,36.229574]
+        },
+        {
+          name: 'Erbil',
+          size: 90746,
+          coords: [44.0091, 36.19111]
+        },
+        {
+          name: 'Sulaymaniyah',
+          size: 25679,
+          coords: [45.442406, 35.551354]
+        }
+      ];
+      */
+      var camps = [{"label": "Kerbala", "coords": [44.01430130004883, 32.58209991455078], "idp": "True", "size": 3432}, {"label": "Baghdad", "coords": [44.39350128173828, 33.341800689697266], "idp": "True", "size": 46848}, {"label": "Thiqar", "coords": [46.3564453125, 31.231128692626953], "idp": "True", "size": 228}, {"label": "Missan", "coords": [43.77495574951172, 33.044586181640625], "idp": "True", "size": 306}, {"label": "Babil", "coords": [44.67203903198242, 32.58655548095703], "idp": "True", "size": 1356}, {"label": "Sulaymaniyah", "coords": [45.434268951416016, 35.55997848510742], "idp": "True", "size": 26364}, {"label": "Duhok", "coords": [43, 36.866667], "idp": "False", "size": 101174}, {"label": "Salahudin", "coords": [43.702881, 34.5449365], "idp": "True", "size": 28638}, {"label": "Erbil", "coords": [44.03300094604492, 36.193599700927734], "idp": "True", "size": 135154}, {"label": "Qadissiya", "coords": [44.87861251831055, 32.00055694580078], "idp": "True", "size": 4530}, {"label": "Ninewa", "coords": [42.763929, 35.9741736], "idp": "False", "size": 1365}, {"label": "Muthana", "coords": [45.28889083862305, 31.338611602783203], "idp": "True", "size": 174}, {"label": "Basra Province", "coords": [47.820098876953125, 30.519100189208984], "idp": "True", "size": 264}, {"label": "Ninewa", "coords": [42.763929, 35.9741736], "idp": "True", "size": 140082}, {"label": "Kirkuk", "coords": [44.41709899902344, 35.42190170288086], "idp": "True", "size": 15000}, {"label": "Sulaymaniyah", "coords": [45.442406, 35.551354], "idp": "False", "size": 24932}, {"label": "Anbar", "coords": [41.1292, 34.357235], "idp": "False", "size": 4534}, {"label": "Najaf", "coords": [44.39535140991211, 32.02724075317383], "idp": "True", "size": 1428}, {"label": "Duhok", "coords": [43.233924865722656, 37.06380844116211], "idp": "True", "size": 232370}, {"label": "Diyala", "coords": [45.14150619506836, 33.90613555908203], "idp": "True", "size": 600}, {"label": "Erbil", "coords": [44.0091, 36.19111], "idp": "False", "size": 90746}, {"label": "Kirkuk", "coords": [44.3667412, 35.4604362], "idp": "False", "size": 701}, {"label": "Anbar", "coords": [41.72910690307617, 32.91257095336914], "idp": "True", "size": 426000}];
+
+      var cities = [
+        {
+          name: 'Mosul',
+          coords: [43.130000, 36.340000],
+          date: "2014-06-10"
+        },
+        {
+          name: "Al Qa'im",
+          coords: [41.0471105,34.3930907],
+          date: "2014-06-21"
+        },
+        {
+          name: "Rawa",
+          coords: [41.9134855,34.479213],
+          date: "2014-06-21"
+        },
+        {
+          name: "Anah",
+          coords: [41.9880723,34.3717072],
+          date: "2014-06-21"
+        },
+        {
+          name: "Husaybah",
+          coords: [43.4508848,33.4090897],
+          date: "2014-06-21"
+        },
+        {
+          name: "Tikrit",
+          coords: [43.6707401,34.6250888],
+          date: "2014-06-11"
+        },
+        {
+          name: "Saqlawia",
+          coords: [43.6996007,33.398324],
+          date: "2014-06-15"
+        },
+        {
+          name: "Baiji",
+          coords: [43.4939289,34.9229158],
+          date: "2014-06-11"
+        },
+        {
+          name: "Tal Afar",
+          coords: [42.4316239,36.3713797],
+          dates: "2014-06-16"
+        },
+        {
+          name: "Samarra",
+          coords: [43.8877631,34.2001637],
+          date: "2014-06-11"
+        },
+        {
+          name: "Dhuluiya",
+          coords: [44.2160225,34.0561968],
+          date: "2014-06-12"
+        },
+        {
+          name: "Sadiyah",
+          coords: [45.125699,34.170796],
+          date: "2014-06-13"
+        }
+      ];
+
+      setTimeout(function() {
+        var today = moment();
+        
+        $.each(cities, function(i,city) {
+          
+          var opac = Math.round(Math.abs(moment(city.date).diff(today, 'days')) / 2);
+          //addCircle(city.coords,8,"red",opac);
+          var text = "ISIS took control of " + city.name + " " + moment(city.date).fromNow();
+          addRect(city.coords,null,opac,text,city.name);
+        });
+        
+        
+        $.each(camps, function(i,camp) {
+          var extraClass = 'blue';
+          var personLabel = "Syrian refugees";
+          if(camp.idp === 'True') {
+            extraClass = 'green';
+            personLabel = "displaced persons";
+          }
+
+          var text = numeral(camp.size).format('0,0') + " " + personLabel + " in " + camp.label;
+          addCircle(camp.coords, makeSize(camp.size), extraClass, null, text, camp.label);
+        });
+
+        var contextCities = [{
+          name: 'Mosul',
+          coords: [43.130000, 36.340000],
+        },
+        {
+          name: 'Baghdad',
+          coords: [44.355905,33.311686]
+        },
+        {
+          name: 'Al Anbar',
+          'coords': [41.72910690307617, 32.91257095336914]
+        }];
+
+        $.each(contextCities, function(i,city) {
+          addCircle(city.coords, 10, 'black', null, city.name, city.name);
+        });
+
+        $('#campToggle').on('click', function() {
+          if(!$(this).data('hide')) {
+            d3.selectAll('.blue').classed('hide',true);
+            $(this).find('.text').html('&#8226; Show');
+            $(this).data('hide',true);
+
+            setTimeout(function() {
+              d3.selectAll('.blue').style('display','None');
+            },600);
+          }
+          else {
+            d3.selectAll('.blue').style('display','block');
+            d3.selectAll('.blue').classed('hide',false);
+            $(this).find('.text').html('&#8226; Hide');
+            $(this).data('hide',false);
+          }
+        });
+
+        $('#idpToggle').on('click', function() {
+          if(!$(this).data('hide')) {
+            d3.selectAll('.green').classed('hide',true);
+            $(this).find('.text').html('&#8226; Show');
+            $(this).data('hide',true);
+
+            setTimeout(function() {
+              d3.selectAll('.green').style('display','None');
+            },600);
+          }
+          else {
+            d3.selectAll('.green').style('display','block');
+            d3.selectAll('.green').classed('hide',false);
+            $(this).find('.text').html('&#8226; Hide');
+            $(this).data('hide',false);
+          }
+        });
+
+
+        $('#borderToggle').on('click', function() {
+          if(!$(this).data('hide')) {
+            d3.selectAll('.shaded').classed('clear',true);
+            $(this).find('.text').html('&#8226; Show');
+            $(this).data('hide',true);
+          }
+          else {
+            d3.selectAll('.shaded').classed('clear',false);
+            $(this).find('.text').html('&#8226; Hide');
+            $(this).data('hide',false);
+          }
+        });
+
+        $('#capturedToggle').on('click', function() {
+          if(!$(this).data('hide')) {
+            d3.selectAll('.rect').classed('hide',true);
+            $(this).find('.text').html('&#8226; Show');
+            $(this).data('hide',true);
+
+            setTimeout(function() {
+              d3.selectAll('.rect').style('display','None');
+            },600);
+          }
+          else {
+            d3.selectAll('.rect').style('display','block');
+            d3.selectAll('.rect').classed('hide',false);
+            $(this).find('.text').html('&#8226; Hide');
+            $(this).data('hide',false);
+          }
+        });
+        
+      },2000);
+    });
+
+
+
+  </script>
+
+</body>
+
+</html>

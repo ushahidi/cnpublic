@@ -300,7 +300,7 @@ window.doOnLoad = function() {
         if(url.match(/\?/)) {
           paramSeparate = '&';
         }
-        $('#download-link').attr('href', url + paramSeparate + "apikey=532d32c7ed3329652f114b70&format=csv");
+        $('#download-link').attr('href', url + paramSeparate + "apikey=532d32c7ed3329652f114b70&format=csv&limit=300");
         updateMap(data.data);
         $('#pager').show();
       }
